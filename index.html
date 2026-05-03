@@ -586,6 +586,89 @@
     cursor: default;
   }
 
+  /* BOOK COVER IMAGE */
+  .ebook-cover-img {
+    height: 280px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .ebook-cover-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    transition: transform 0.4s;
+  }
+
+  .ebook-card:hover .ebook-cover-img img { transform: scale(1.03); }
+
+  /* PLATFORM BUTTONS */
+  .ebook-platforms { margin-top: 16px; }
+
+  .platform-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-family: 'Orbitron', monospace;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .platform-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+
+  .btn-platform {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 3px;
+    text-decoration: none;
+    font-family: 'Orbitron', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    transition: all 0.3s;
+    border: 1px solid transparent;
+  }
+
+  .btn-amazon {
+    background: rgba(255,153,0,0.15);
+    border-color: rgba(255,153,0,0.4);
+    color: #ff9900;
+  }
+
+  .btn-amazon:hover {
+    background: rgba(255,153,0,0.25);
+    box-shadow: 0 0 15px rgba(255,153,0,0.3);
+    transform: translateY(-2px);
+  }
+
+  .btn-gumroad {
+    background: rgba(255,144,104,0.15);
+    border-color: rgba(255,144,104,0.4);
+    color: #ff9068;
+  }
+
+  .btn-gumroad:hover {
+    background: rgba(255,144,104,0.25);
+    box-shadow: 0 0 15px rgba(255,144,104,0.3);
+    transform: translateY(-2px);
+  }
+
+  .btn-payhip {
+    background: rgba(0,150,255,0.15);
+    border-color: rgba(0,150,255,0.4);
+    color: #0096ff;
+  }
+
+  .btn-payhip:hover {
+    background: rgba(0,150,255,0.25);
+    box-shadow: 0 0 15px rgba(0,150,255,0.3);
+    transform: translateY(-2px);
+  }
+
   /* COURSES */
   .courses-banner {
     background: linear-gradient(135deg, rgba(123,47,247,0.1), rgba(0,234,255,0.05));
@@ -779,6 +862,115 @@
     box-shadow: 0 0 30px rgba(0,234,255,0.5);
     transform: translateY(-2px);
   }
+
+  /* ORDER MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(5,8,22,0.95);
+    backdrop-filter: blur(20px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  .modal-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal {
+    background: #080d22;
+    border: 1px solid var(--glass-border);
+    border-radius: 6px;
+    padding: 40px;
+    width: 100%;
+    max-width: 520px;
+    position: relative;
+    transform: translateY(30px);
+    transition: transform 0.3s;
+  }
+
+  .modal-overlay.active .modal {
+    transform: translateY(0);
+  }
+
+  .modal::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--cyan), var(--purple));
+    border-radius: 6px 6px 0 0;
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: var(--glass);
+    border: 1px solid var(--glass-border);
+    color: var(--muted);
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+  }
+
+  .modal-close:hover { color: white; border-color: var(--cyan); }
+
+  .modal-service-tag {
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--cyan);
+    font-family: 'Orbitron', monospace;
+    margin-bottom: 10px;
+  }
+
+  .modal h2 {
+    font-family: 'Orbitron', monospace;
+    font-size: 18px;
+    color: white;
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .modal-desc {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 28px;
+    line-height: 1.6;
+  }
+
+  .modal-success {
+    text-align: center;
+    padding: 20px 0;
+    display: none;
+  }
+
+  .modal-success .success-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .modal-success h3 {
+    font-family: 'Orbitron', monospace;
+    font-size: 16px;
+    color: var(--cyan);
+    margin-bottom: 10px;
+  }
+
+  .modal-success p { font-size: 13px; color: var(--muted); }
 
   /* FOOTER */
   footer {
@@ -1114,50 +1306,117 @@
 
   <div class="services-grid fade-up">
 
-    <div class="service-card">
+    <div class="service-card" onclick="openOrder('AI Workflow Automation', 'Build end-to-end automated workflows using Make.com and n8n that eliminate repetitive manual tasks and run 24/7.')">
       <span class="service-icon">⚡</span>
       <h3>AI Workflow Automation</h3>
       <p>We build end-to-end automated workflows using Make.com and n8n that eliminate repetitive manual tasks, connect your tools, and run 24/7 without human input.</p>
-      <span class="available-badge">● Available Now</span>
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-top:16px;">
+        <span class="available-badge">● Available Now</span>
+        <span style="font-size:11px; color:var(--cyan); letter-spacing:1px; font-family:'Orbitron',monospace;">Order →</span>
+      </div>
     </div>
 
-    <div class="service-card">
+    <div class="service-card" onclick="openOrder('Shopify Store Automation', 'Abandoned cart recovery, order notifications, customer email sequences, inventory alerts and review requests — fully automated.')">
       <span class="service-icon">🛒</span>
       <h3>Shopify Store Automation</h3>
       <p>Abandoned cart recovery, order notifications, customer email sequences, inventory alerts and review requests — fully automated for your Shopify store.</p>
-      <span class="available-badge">● Available Now</span>
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-top:16px;">
+        <span class="available-badge">● Available Now</span>
+        <span style="font-size:11px; color:var(--cyan); letter-spacing:1px; font-family:'Orbitron',monospace;">Order →</span>
+      </div>
     </div>
 
-    <div class="service-card">
+    <div class="service-card" onclick="openOrder('Cybersecurity Services', 'Vulnerability assessments, penetration testing, security audits and digital asset protection for your business.')">
       <span class="service-icon">🔐</span>
       <h3>Cybersecurity Services</h3>
       <p>Vulnerability assessments, penetration testing, security audits, and digital asset protection for businesses that take their security seriously.</p>
-      <span class="available-badge">● Available Now</span>
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-top:16px;">
+        <span class="available-badge">● Available Now</span>
+        <span style="font-size:11px; color:var(--cyan); letter-spacing:1px; font-family:'Orbitron',monospace;">Order →</span>
+      </div>
     </div>
 
-    <div class="service-card">
+    <div class="service-card" onclick="openOrder('AI Chatbot & Support Systems', 'Intelligent AI-powered chatbots for websites and stores that handle customer queries and respond instantly around the clock.')">
       <span class="service-icon">🤖</span>
       <h3>AI Chatbot & Support Systems</h3>
       <p>Intelligent AI-powered chatbots for websites and stores that handle customer queries, qualify leads, and respond instantly around the clock.</p>
-      <span class="available-badge">● Available Now</span>
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-top:16px;">
+        <span class="available-badge">● Available Now</span>
+        <span style="font-size:11px; color:var(--cyan); letter-spacing:1px; font-family:'Orbitron',monospace;">Order →</span>
+      </div>
     </div>
 
-    <div class="service-card">
+    <div class="service-card" style="cursor:default;">
       <span class="service-icon">☁️</span>
       <h3>Cloud Computing</h3>
       <p>Cloud infrastructure setup, migration, and management services to scale your business operations securely and efficiently in the cloud.</p>
       <span class="coming-soon-badge">⏳ Coming Soon</span>
     </div>
 
-    <div class="service-card">
+    <div class="service-card" onclick="openOrder('Data & Reporting Automation', 'Automated data collection, processing and reporting systems that give you business intelligence without manual spreadsheet work.')">
       <span class="service-icon">📊</span>
       <h3>Data & Reporting Automation</h3>
       <p>Automated data collection, processing, and reporting systems that give you business intelligence without manual spreadsheet work.</p>
-      <span class="available-badge">● Available Now</span>
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-top:16px;">
+        <span class="available-badge">● Available Now</span>
+        <span style="font-size:11px; color:var(--cyan); letter-spacing:1px; font-family:'Orbitron',monospace;">Order →</span>
+      </div>
     </div>
 
   </div>
 </section>
+
+<!-- ORDER MODAL -->
+<div class="modal-overlay" id="orderModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeOrder()">✕</button>
+
+    <div id="modalForm">
+      <div class="modal-service-tag">Service Order</div>
+      <h2 id="modalTitle">Service Name</h2>
+      <p class="modal-desc" id="modalDesc">Service description here.</p>
+
+      <form action="https://formspree.io/f/xbdqnerv" method="POST" onsubmit="handleModalSubmit(event)">
+        <input type="hidden" name="service" id="modalServiceInput" value="" />
+
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" name="name" placeholder="John Smith" required />
+        </div>
+
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" name="email" placeholder="john@example.com" required />
+        </div>
+
+        <div class="form-group">
+          <label>Your Budget (Optional)</label>
+          <select name="budget">
+            <option value="">Select budget range...</option>
+            <option>Under $100</option>
+            <option>$100 - $500</option>
+            <option>$500 - $1,000</option>
+            <option>$1,000 - $3,000</option>
+            <option>$3,000+</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Tell Us About Your Project</label>
+          <textarea name="message" placeholder="Describe what you need, your timeline, any specific requirements..." required></textarea>
+        </div>
+
+        <button type="submit" class="btn-submit">Send Order Request →</button>
+      </form>
+    </div>
+
+    <div class="modal-success" id="modalSuccess">
+      <span class="success-icon">✅</span>
+      <h3>Order Request Sent!</h3>
+      <p>We received your request for <strong id="successService"></strong>. We'll reply to your email within 24 hours.</p>
+    </div>
+  </div>
+</div>
 
 <div class="section-divider"></div>
 
@@ -1171,50 +1430,72 @@
 
   <div class="ebooks-grid fade-up">
 
+    <!-- ============================================================
+         BOOK 1 — AI POWERED ETHICAL HACKING (LIVE)
+         TO UPDATE: Replace any link or description below
+         ============================================================ -->
     <div class="ebook-card">
-      <div class="ebook-cover-placeholder">
-        <span style="font-size:48px;">🤖</span>
-        <span>AI AUTOMATION</span>
-      </div>
-      <div class="ebook-body">
-        <div class="ebook-tag">AI & Automation</div>
-        <h3>Coming Soon: AI Automation Mastery</h3>
-        <p>A complete guide to building intelligent automation workflows from scratch using Make.com, n8n and OpenAI.</p>
-        <div class="ebook-footer">
-          <span class="ebook-price">TBA</span>
-          <span class="btn-coming">Coming Soon</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="ebook-card">
-      <div class="ebook-cover-placeholder">
-        <span style="font-size:48px;">🔐</span>
-        <span>CYBERSECURITY</span>
+      <div class="ebook-cover-img">
+        <img src="book1-cover.jpg" alt="AI-Powered Ethical Hacking" />
       </div>
       <div class="ebook-body">
         <div class="ebook-tag">Cybersecurity</div>
-        <h3>Coming Soon: Digital Defense Handbook</h3>
-        <p>Practical cybersecurity strategies for individuals and small businesses to protect their digital assets effectively.</p>
-        <div class="ebook-footer">
-          <span class="ebook-price">TBA</span>
-          <span class="btn-coming">Coming Soon</span>
+        <h3>AI-Powered Ethical Hacking</h3>
+        <p>The complete beginner's guide to learning cybersecurity faster using AI as your personal tutor. From zero to bug bounty ready in 30 days.</p>
+        <div class="ebook-platforms">
+          <span class="platform-label">Available on:</span>
+          <div class="platform-btns">
+            <a href="YOUR_AMAZON_LINK_HERE" target="_blank" class="btn-platform btn-amazon">
+              <span>🛍</span> Amazon
+            </a>
+            <a href="https://ghostwriterfti.gumroad.com/l/ijitki" target="_blank" class="btn-platform btn-gumroad">
+              <span>🟠</span> Gumroad
+            </a>
+            <a href="https://payhip.com/b/cbBmg" target="_blank" class="btn-platform btn-payhip">
+              <span>💙</span> Payhip
+            </a>
+          </div>
         </div>
       </div>
     </div>
 
+    <!-- ============================================================
+         HOW TO ADD A NEW BOOK — COPY FROM HERE
+         ============================================================
+         STEP 1: Copy the entire block below (from div class="ebook-card" to the closing /div)
+         STEP 2: Paste it right after this comment block
+         STEP 3: Replace the following:
+           - book2-cover.jpg → your new cover image filename (upload it to GitHub too)
+           - The ebook-tag text → topic e.g. AI Automation, Shopify, Networking
+           - The h3 title → your new book title
+           - The p description → your new book description (2 sentences)
+           - YOUR_AMAZON_LINK_HERE → your Amazon book link
+           - YOUR_GUMROAD_LINK_HERE → your Gumroad book link
+           - YOUR_PAYHIP_LINK_HERE → your Payhip book link
+         STEP 4: Commit changes. Done.
+         ============================================================ -->
     <div class="ebook-card">
       <div class="ebook-cover-placeholder">
-        <span style="font-size:48px;">🛒</span>
-        <span>SHOPIFY</span>
+        <span style="font-size:48px;">📖</span>
+        <span>COMING SOON</span>
       </div>
       <div class="ebook-body">
-        <div class="ebook-tag">Ecommerce</div>
-        <h3>Coming Soon: Shopify Automation Blueprint</h3>
-        <p>How to automate your entire Shopify store operations and recover lost sales on autopilot.</p>
-        <div class="ebook-footer">
-          <span class="ebook-price">TBA</span>
-          <span class="btn-coming">Coming Soon</span>
+        <div class="ebook-tag">New Release</div>
+        <h3>Next Book Coming Soon</h3>
+        <p>Another practical tech guide from FutureStack Intelligence. Subscribe to get notified the moment it drops.</p>
+        <div class="ebook-platforms">
+          <span class="platform-label">Available on:</span>
+          <div class="platform-btns">
+            <a href="YOUR_AMAZON_LINK_HERE" target="_blank" class="btn-platform btn-amazon" style="opacity:0.4; pointer-events:none;">
+              <span>🛍</span> Amazon
+            </a>
+            <a href="YOUR_GUMROAD_LINK_HERE" target="_blank" class="btn-platform btn-gumroad" style="opacity:0.4; pointer-events:none;">
+              <span>🟠</span> Gumroad
+            </a>
+            <a href="YOUR_PAYHIP_LINK_HERE" target="_blank" class="btn-platform btn-payhip" style="opacity:0.4; pointer-events:none;">
+              <span>💙</span> Payhip
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -1222,7 +1503,7 @@
   </div>
 
   <p style="text-align:center; color: var(--muted); font-size:13px; margin-top:40px; letter-spacing:1px;">
-    📢 More ebooks dropping soon. Subscribe below to get notified first.
+    📢 More ebooks dropping soon. Subscribe below to get notified the moment they launch.
   </p>
 </section>
 
@@ -1293,6 +1574,16 @@
           <div class="contact-item-label">X (Twitter)</div>
           <div class="contact-item-value">
             <a href="https://x.com/FUTURESTACK001" target="_blank">@FUTURESTACK001</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <div class="contact-icon">in</div>
+        <div class="contact-item-text">
+          <div class="contact-item-label">LinkedIn</div>
+          <div class="contact-item-value">
+            <a href="https://www.linkedin.com/in/futurestackintelligence" target="_blank">FutureStack Intelligence</a>
           </div>
         </div>
       </div>
@@ -1373,6 +1664,7 @@
       <a href="#courses">Courses</a>
       <a href="#contact">Contact</a>
       <a href="https://x.com/FUTURESTACK001" target="_blank">X / Twitter</a>
+      <a href="https://www.linkedin.com/in/futurestackintelligence" target="_blank">LinkedIn</a>
     </div>
     <div class="footer-copy">Built with precision. Delivered globally.</div>
   </div>
@@ -1414,6 +1706,57 @@
   }, { threshold: 0.1 });
 
   document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // ORDER MODAL
+  function openOrder(serviceName, serviceDesc) {
+    document.getElementById('modalTitle').textContent = serviceName;
+    document.getElementById('modalDesc').textContent = serviceDesc;
+    document.getElementById('modalServiceInput').value = serviceName;
+    document.getElementById('modalForm').style.display = 'block';
+    document.getElementById('modalSuccess').style.display = 'none';
+    document.getElementById('orderModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeOrder() {
+    document.getElementById('orderModal').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('orderModal').addEventListener('click', function(e) {
+    if (e.target === this) closeOrder();
+  });
+
+  async function handleModalSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    const btn = form.querySelector('.btn-submit');
+    const serviceName = document.getElementById('modalServiceInput').value;
+
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (response.ok) {
+        document.getElementById('modalForm').style.display = 'none';
+        document.getElementById('successService').textContent = serviceName;
+        document.getElementById('modalSuccess').style.display = 'block';
+        setTimeout(closeOrder, 4000);
+      } else {
+        btn.textContent = 'Failed. Try Again.';
+        btn.disabled = false;
+      }
+    } catch {
+      btn.textContent = 'Failed. Try Again.';
+      btn.disabled = false;
+    }
+  }
 
   // FORM SUBMIT
   function handleSubmit() {
