@@ -1073,9 +1073,123 @@
     align-items: center;
   }
 
+  /* HAMBURGER */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 8px;
+    border: 1px solid var(--glass-border);
+    border-radius: 4px;
+    background: var(--glass);
+    transition: all 0.3s;
+    z-index: 200;
+  }
+  .hamburger:hover { border-color: var(--cyan); }
+  .hamburger span {
+    display: block;
+    width: 22px; height: 2px;
+    background: var(--cyan);
+    border-radius: 2px;
+    transition: all 0.3s;
+  }
+  .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .mobile-nav {
+    display: none;
+    position: fixed;
+    top: 69px; left: 0; right: 0;
+    background: rgba(5,8,22,0.98);
+    backdrop-filter: blur(30px);
+    border-bottom: 1px solid var(--glass-border);
+    padding: 16px;
+    z-index: 99;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .mobile-nav.active { display: flex; }
+  .mobile-nav a {
+    color: var(--muted);
+    text-decoration: none;
+    font-family: 'Orbitron', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 14px 16px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.2s;
+  }
+  .mobile-nav a:active { color: var(--cyan); background: var(--glass); border-color: var(--glass-border); }
+  .mobile-nav a::after { content: '→'; color: var(--cyan); font-size: 14px; }
+  .mobile-nav-cta {
+    margin-top: 8px;
+    background: linear-gradient(135deg, var(--cyan), var(--blue)) !important;
+    color: var(--dark) !important;
+    font-weight: 700;
+    justify-content: center !important;
+  }
+  .mobile-nav-cta::after { display: none !important; }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: center;
+  }
+
+  /* FULL MOBILE RESPONSIVE */
   @media (max-width: 768px) {
-    .about-grid { grid-template-columns: 1fr; }
-    .stats-bar { padding: 30px 20px; }
+    .cursor, .cursor-ring { display: none; }
+    body { cursor: auto; }
+    nav { padding: 12px 20px; }
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .about-grid { grid-template-columns: 1fr; gap: 36px; }
+    .stats-bar { padding: 24px 20px; grid-template-columns: repeat(2,1fr); }
+    .stat-number { font-size: 22px; }
+    .hero { padding: 60px 20px 80px; min-height: 90vh; }
+    .hero p { font-size: 15px; }
+    .hero-btns { flex-direction: column; align-items: center; gap: 12px; }
+    .btn-primary, .btn-secondary { width: 100%; text-align: center; padding: 16px 20px; }
+    .hero-glow { width: 300px; height: 300px; }
+    section { padding: 60px 20px; }
+    .section-title { font-size: clamp(22px, 6vw, 32px); }
+    .services-grid { grid-template-columns: 1fr; gap: 14px; }
+    .service-card { padding: 24px; }
+    .ebooks-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
+    .ebook-cover-img { height: 240px; }
+    .platform-btns { gap: 6px; }
+    .btn-platform { padding: 10px 12px; }
+    .courses-banner { padding: 36px 20px; }
+    .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    .modal { padding: 28px 20px; margin: 10px; }
+    .modal h2 { font-size: 16px; }
+    .newsletter-bar { padding: 36px 20px; margin: 0 20px 60px; }
+    .newsletter-form { flex-direction: column; }
+    .newsletter-form input, .newsletter-form a { width: 100%; text-align: center; justify-content: center; }
+    footer { padding: 30px 20px; }
+    .footer-inner { flex-direction: column; align-items: flex-start; gap: 24px; }
+    .footer-links { gap: 14px; flex-wrap: wrap; }
+  }
+
+  @media (max-width: 380px) {
+    .hero h1 { font-size: 25px; }
+    .btn-platform { font-size: 9px; padding: 8px 10px; }
+    .platform-btns { flex-direction: column; }
+  }
+
+  @media (hover: none) {
+    .service-card:active { background: rgba(0,234,255,0.08); transform: scale(0.98); }
+    .btn-platform:active { transform: scale(0.96); }
+    .btn-primary:active, .btn-secondary:active { transform: scale(0.97); }
   }
 
   .about-text p {
@@ -1216,7 +1330,21 @@
     <li><a href="#courses">Courses</a></li>
     <li><a href="#contact" class="nav-cta">Work With Us</a></li>
   </ul>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
 </nav>
+
+<!-- MOBILE NAV MENU -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="#about" onclick="closeMenu()">About</a>
+  <a href="#services" onclick="closeMenu()">Services</a>
+  <a href="#ebooks" onclick="closeMenu()">Ebooks</a>
+  <a href="#courses" onclick="closeMenu()">Courses</a>
+  <a href="#contact" class="mobile-nav-cta" onclick="closeMenu()">Work With Us</a>
+</div>
 
 <!-- HERO -->
 <div class="hero">
@@ -1671,6 +1799,30 @@
 </footer>
 
 <script>
+  // HAMBURGER MENU
+  function toggleMenu() {
+    const hamburger = document.getElementById('hamburger');
+    const mobileNav = document.getElementById('mobileNav');
+    hamburger.classList.toggle('active');
+    mobileNav.classList.toggle('active');
+    document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
+  }
+
+  function closeMenu() {
+    document.getElementById('hamburger').classList.remove('active');
+    document.getElementById('mobileNav').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  // Close menu when clicking outside
+  document.addEventListener('click', function(e) {
+    const nav = document.getElementById('mobileNav');
+    const hamburger = document.getElementById('hamburger');
+    if (nav.classList.contains('active') && !nav.contains(e.target) && !hamburger.contains(e.target)) {
+      closeMenu();
+    }
+  });
+
   // CURSOR
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursorRing');
