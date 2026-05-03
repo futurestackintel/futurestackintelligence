@@ -6,1311 +6,319 @@
 <title>FutureStack Intelligence</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --cyan: #00eaff;
-    --purple: #7b2ff7;
-    --blue: #1a6dff;
-    --dark: #050816;
-    --dark2: #0a0f2c;
-    --glass: rgba(0,234,255,0.05);
-    --glass-border: rgba(0,234,255,0.15);
-    --text: #e0e8ff;
-    --muted: #7a8ab0;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    font-family: 'Rajdhani', sans-serif;
-    background: var(--dark);
-    color: var(--text);
-    overflow-x: hidden;
-    cursor: none;
-  }
-
-  /* CUSTOM CURSOR */
-  .cursor {
-    width: 12px; height: 12px;
-    background: var(--cyan);
-    border-radius: 50%;
-    position: fixed;
-    pointer-events: none;
-    z-index: 9999;
-    transition: transform 0.1s;
-    box-shadow: 0 0 10px var(--cyan);
-  }
-  .cursor-ring {
-    width: 36px; height: 36px;
-    border: 1px solid rgba(0,234,255,0.5);
-    border-radius: 50%;
-    position: fixed;
-    pointer-events: none;
-    z-index: 9998;
-    transition: all 0.15s ease;
-  }
-
-  /* GRID BACKGROUND */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(0,234,255,0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(0,234,255,0.03) 1px, transparent 1px);
-    background-size: 50px 50px;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  /* NAVBAR */
-  nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 40px;
-    background: rgba(5,8,22,0.85);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--glass-border);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-
-  .nav-logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    text-decoration: none;
-  }
-
-  .nav-logo img {
-    height: 44px;
-    width: 44px;
-    object-fit: contain;
-  }
-
-  .nav-brand {
-    font-family: 'Orbitron', monospace;
-    font-size: 14px;
-    font-weight: 700;
-    color: white;
-    line-height: 1.2;
-    letter-spacing: 1px;
-  }
-
-  .nav-brand span {
-    display: block;
-    font-size: 9px;
-    color: var(--cyan);
-    letter-spacing: 3px;
-    font-weight: 400;
-  }
-
-  .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 30px;
-    list-style: none;
-  }
-
-  .nav-links a {
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 13px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-weight: 500;
-    transition: color 0.3s;
-    position: relative;
-  }
-
-  .nav-links a::after {
-    content: '';
-    position: absolute;
-    bottom: -4px; left: 0;
-    width: 0; height: 1px;
-    background: var(--cyan);
-    transition: width 0.3s;
-  }
-
-  .nav-links a:hover { color: var(--cyan); }
-  .nav-links a:hover::after { width: 100%; }
-
-  .nav-cta {
-    background: transparent;
-    border: 1px solid var(--cyan);
-    color: var(--cyan) !important;
-    padding: 8px 20px;
-    border-radius: 2px;
-    font-family: 'Orbitron', monospace;
-    font-size: 10px !important;
-    letter-spacing: 2px !important;
-    transition: all 0.3s !important;
-  }
-
-  .nav-cta:hover {
-    background: var(--cyan) !important;
-    color: var(--dark) !important;
-    box-shadow: 0 0 20px rgba(0,234,255,0.4) !important;
-  }
-
-  .nav-cta::after { display: none !important; }
-
-  /* HERO */
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 80px 20px;
-    position: relative;
-    z-index: 1;
-  }
-
-  .hero-glow {
-    position: absolute;
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, rgba(123,47,247,0.15) 0%, transparent 70%);
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-  }
-
-  .hero-glow2 {
-    position: absolute;
-    width: 400px; height: 400px;
-    background: radial-gradient(circle, rgba(0,234,255,0.08) 0%, transparent 70%);
-    top: 30%; left: 30%;
-    pointer-events: none;
-  }
-
-  .hero-content { position: relative; z-index: 2; max-width: 800px; }
-
-  .hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    border: 1px solid var(--glass-border);
-    background: var(--glass);
-    padding: 8px 20px;
-    border-radius: 100px;
-    font-size: 11px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--cyan);
-    margin-bottom: 30px;
-    animation: fadeUp 0.8s ease forwards;
-  }
-
-  .hero-badge::before {
-    content: '';
-    width: 6px; height: 6px;
-    background: var(--cyan);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.8); }
-  }
-
-  .hero h1 {
-    font-family: 'Orbitron', monospace;
-    font-size: clamp(32px, 6vw, 62px);
-    font-weight: 900;
-    line-height: 1.1;
-    margin-bottom: 24px;
-    animation: fadeUp 0.8s ease 0.2s both;
-  }
-
-  .hero h1 .line1 { color: white; display: block; }
-  .hero h1 .line2 {
-    display: block;
-    background: linear-gradient(135deg, var(--cyan), var(--purple));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .hero p {
-    font-size: 18px;
-    color: var(--muted);
-    max-width: 560px;
-    margin: 0 auto 40px;
-    line-height: 1.7;
-    font-weight: 300;
-    letter-spacing: 0.5px;
-    animation: fadeUp 0.8s ease 0.4s both;
-  }
-
-  .hero-btns {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
-    animation: fadeUp 0.8s ease 0.6s both;
-  }
-
-  .btn-primary {
-    background: linear-gradient(135deg, var(--cyan), var(--blue));
-    color: var(--dark);
-    padding: 14px 32px;
-    border-radius: 2px;
-    text-decoration: none;
-    font-family: 'Orbitron', monospace;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    transition: all 0.3s;
-    box-shadow: 0 0 30px rgba(0,234,255,0.3);
-  }
-
-  .btn-primary:hover {
-    box-shadow: 0 0 50px rgba(0,234,255,0.6);
-    transform: translateY(-2px);
-  }
-
-  .btn-secondary {
-    border: 1px solid var(--glass-border);
-    color: var(--text);
-    padding: 14px 32px;
-    border-radius: 2px;
-    text-decoration: none;
-    font-family: 'Orbitron', monospace;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    transition: all 0.3s;
-    background: var(--glass);
-    backdrop-filter: blur(10px);
-  }
-
-  .btn-secondary:hover {
-    border-color: var(--cyan);
-    color: var(--cyan);
-    box-shadow: 0 0 20px rgba(0,234,255,0.1);
-  }
-
-  /* STATS BAR */
-  .stats-bar {
-    position: relative;
-    z-index: 1;
-    border-top: 1px solid var(--glass-border);
-    border-bottom: 1px solid var(--glass-border);
-    background: rgba(0,234,255,0.02);
-    padding: 30px 40px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 20px;
-    text-align: center;
-  }
-
-  .stat-item {}
-  .stat-number {
-    font-family: 'Orbitron', monospace;
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--cyan);
-    display: block;
-  }
-  .stat-label {
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-top: 4px;
-  }
-
-  /* SECTIONS */
-  section {
-    position: relative;
-    z-index: 1;
-    padding: 100px 40px;
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-
-  .section-tag {
-    font-size: 10px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--cyan);
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .section-tag::before {
-    content: '';
-    width: 30px; height: 1px;
-    background: var(--cyan);
-  }
-
-  .section-title {
-    font-family: 'Orbitron', monospace;
-    font-size: clamp(24px, 4vw, 38px);
-    font-weight: 700;
-    color: white;
-    margin-bottom: 16px;
-    line-height: 1.2;
-  }
-
-  .section-sub {
-    color: var(--muted);
-    font-size: 16px;
-    max-width: 560px;
-    line-height: 1.7;
-    margin-bottom: 60px;
-    font-weight: 300;
-  }
-
-  /* SERVICES */
-  .services-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-  }
-
-  .service-card {
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
-    border-radius: 4px;
-    padding: 36px;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.4s;
-    text-decoration: none;
-    color: inherit;
-    display: block;
-  }
-
-  .service-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--cyan), var(--purple));
-    transform: scaleX(0);
-    transition: transform 0.4s;
-  }
-
-  .service-card:hover {
-    background: rgba(0,234,255,0.08);
-    border-color: rgba(0,234,255,0.3);
-    transform: translateY(-4px);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-  }
-
-  .service-card:hover::before { transform: scaleX(1); }
-
-  .service-icon {
-    font-size: 32px;
-    margin-bottom: 20px;
-    display: block;
-  }
-
-  .service-card h3 {
-    font-family: 'Orbitron', monospace;
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    color: white;
-    margin-bottom: 12px;
-  }
-
-  .service-card p {
-    font-size: 14px;
-    color: var(--muted);
-    line-height: 1.7;
-    font-weight: 300;
-  }
-
-  .coming-soon-badge {
-    display: inline-block;
-    background: rgba(123,47,247,0.2);
-    border: 1px solid rgba(123,47,247,0.4);
-    color: #b57bff;
-    font-size: 9px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    padding: 4px 12px;
-    border-radius: 100px;
-    margin-top: 16px;
-    font-family: 'Orbitron', monospace;
-  }
-
-  .available-badge {
-    display: inline-block;
-    background: rgba(0,234,255,0.1);
-    border: 1px solid rgba(0,234,255,0.3);
-    color: var(--cyan);
-    font-size: 9px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    padding: 4px 12px;
-    border-radius: 100px;
-    margin-top: 16px;
-    font-family: 'Orbitron', monospace;
-  }
-
-  /* EBOOKS */
-  .ebooks-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 24px;
-  }
-
-  .ebook-card {
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
-    border-radius: 4px;
-    overflow: hidden;
-    transition: all 0.4s;
-  }
-
-  .ebook-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
-    border-color: rgba(0,234,255,0.3);
-  }
-
-  .ebook-cover {
-    height: 200px;
-    background: linear-gradient(135deg, var(--dark2), #12103a);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 60px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .ebook-cover::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(0,234,255,0.05), rgba(123,47,247,0.1));
-  }
-
-  .ebook-cover-placeholder {
-    background: linear-gradient(135deg, rgba(0,234,255,0.1), rgba(123,47,247,0.2));
-    height: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .ebook-cover-placeholder span {
-    font-family: 'Orbitron', monospace;
-    font-size: 11px;
-    letter-spacing: 2px;
-    color: var(--cyan);
-    opacity: 0.7;
-  }
-
-  .ebook-body { padding: 24px; }
-
-  .ebook-tag {
-    font-size: 9px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--cyan);
-    margin-bottom: 10px;
-    font-family: 'Orbitron', monospace;
-  }
-
-  .ebook-card h3 {
-    font-family: 'Orbitron', monospace;
-    font-size: 13px;
-    color: white;
-    margin-bottom: 10px;
-    line-height: 1.4;
-  }
-
-  .ebook-card p {
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.6;
-    margin-bottom: 20px;
-  }
-
-  .ebook-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .ebook-price {
-    font-family: 'Orbitron', monospace;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--cyan);
-  }
-
-  .btn-buy {
-    background: linear-gradient(135deg, var(--cyan), var(--blue));
-    color: var(--dark);
-    padding: 8px 20px;
-    border-radius: 2px;
-    text-decoration: none;
-    font-family: 'Orbitron', monospace;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    transition: all 0.3s;
-  }
-
-  .btn-buy:hover {
-    box-shadow: 0 0 20px rgba(0,234,255,0.5);
-    transform: translateY(-1px);
-  }
-
-  .btn-coming {
-    background: rgba(123,47,247,0.2);
-    border: 1px solid rgba(123,47,247,0.4);
-    color: #b57bff;
-    padding: 8px 20px;
-    border-radius: 2px;
-    font-family: 'Orbitron', monospace;
-    font-size: 10px;
-    letter-spacing: 1px;
-    cursor: default;
-  }
-
-  /* BOOK COVER IMAGE */
-  .ebook-cover-img {
-    height: 280px;
-    overflow: hidden;
-    position: relative;
-  }
-
-  .ebook-cover-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: top;
-    transition: transform 0.4s;
-  }
-
-  .ebook-card:hover .ebook-cover-img img { transform: scale(1.03); }
-
-  /* PLATFORM BUTTONS */
-  .ebook-platforms { margin-top: 16px; }
-
-  .platform-label {
-    font-size: 10px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--muted);
-    font-family: 'Orbitron', monospace;
-    display: block;
-    margin-bottom: 10px;
-  }
-
-  .platform-btns { display: flex; gap: 8px; flex-wrap: wrap; }
-
-  .btn-platform {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 14px;
-    border-radius: 3px;
-    text-decoration: none;
-    font-family: 'Orbitron', monospace;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    transition: all 0.3s;
-    border: 1px solid transparent;
-  }
-
-  .btn-amazon {
-    background: rgba(255,153,0,0.15);
-    border-color: rgba(255,153,0,0.4);
-    color: #ff9900;
-  }
-
-  .btn-amazon:hover {
-    background: rgba(255,153,0,0.25);
-    box-shadow: 0 0 15px rgba(255,153,0,0.3);
-    transform: translateY(-2px);
-  }
-
-  .btn-gumroad {
-    background: rgba(255,144,104,0.15);
-    border-color: rgba(255,144,104,0.4);
-    color: #ff9068;
-  }
-
-  .btn-gumroad:hover {
-    background: rgba(255,144,104,0.25);
-    box-shadow: 0 0 15px rgba(255,144,104,0.3);
-    transform: translateY(-2px);
-  }
-
-  .btn-payhip {
-    background: rgba(0,150,255,0.15);
-    border-color: rgba(0,150,255,0.4);
-    color: #0096ff;
-  }
-
-  .btn-payhip:hover {
-    background: rgba(0,150,255,0.25);
-    box-shadow: 0 0 15px rgba(0,150,255,0.3);
-    transform: translateY(-2px);
-  }
-
-  /* COURSES */
-  .courses-banner {
-    background: linear-gradient(135deg, rgba(123,47,247,0.1), rgba(0,234,255,0.05));
-    border: 1px solid rgba(123,47,247,0.3);
-    border-radius: 4px;
-    padding: 60px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .courses-banner::before {
-    content: 'COMING SOON';
-    position: absolute;
-    top: 20px; right: -30px;
-    background: var(--purple);
-    color: white;
-    font-family: 'Orbitron', monospace;
-    font-size: 10px;
-    letter-spacing: 2px;
-    padding: 6px 50px;
-    transform: rotate(45deg);
-  }
-
-  .courses-banner h3 {
-    font-family: 'Orbitron', monospace;
-    font-size: 24px;
-    color: white;
-    margin-bottom: 16px;
-  }
-
-  .courses-banner p {
-    color: var(--muted);
-    font-size: 15px;
-    max-width: 500px;
-    margin: 0 auto 30px;
-    line-height: 1.7;
-  }
-
-  .course-topics {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    justify-content: center;
-    margin-bottom: 30px;
-  }
-
-  .topic-tag {
-    border: 1px solid var(--glass-border);
-    color: var(--muted);
-    padding: 6px 16px;
-    border-radius: 100px;
-    font-size: 11px;
-    letter-spacing: 1px;
-  }
-
-  /* CONTACT */
-  .contact-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    align-items: start;
-  }
-
-  @media (max-width: 768px) {
-    .contact-grid { grid-template-columns: 1fr; }
-    nav { padding: 12px 20px; }
-    .nav-links { gap: 16px; }
-    section { padding: 60px 20px; }
-    .courses-banner { padding: 40px 20px; }
-  }
-
-  .contact-info h3 {
-    font-family: 'Orbitron', monospace;
-    font-size: 13px;
-    color: white;
-    margin-bottom: 30px;
-    letter-spacing: 1px;
-  }
-
-  .contact-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    margin-bottom: 24px;
-    padding-bottom: 24px;
-    border-bottom: 1px solid var(--glass-border);
-  }
-
-  .contact-item:last-child { border-bottom: none; }
-
-  .contact-icon {
-    width: 40px; height: 40px;
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
-    border-radius: 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
-  }
-
-  .contact-item-text { }
-  .contact-item-label {
-    font-size: 10px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 4px;
-    font-family: 'Orbitron', monospace;
-  }
-
-  .contact-item-value {
-    font-size: 14px;
-    color: var(--text);
-  }
-
-  .contact-item-value a {
-    color: var(--cyan);
-    text-decoration: none;
-  }
-
-  .contact-form { }
-
-  .contact-form h3 {
-    font-family: 'Orbitron', monospace;
-    font-size: 13px;
-    color: white;
-    margin-bottom: 30px;
-    letter-spacing: 1px;
-  }
-
-  .form-group { margin-bottom: 20px; }
-
-  .form-group label {
-    display: block;
-    font-size: 10px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 8px;
-    font-family: 'Orbitron', monospace;
-  }
-
-  .form-group input,
-  .form-group select,
-  .form-group textarea {
-    width: 100%;
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
-    color: var(--text);
-    padding: 14px 16px;
-    border-radius: 2px;
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.3s;
-  }
-
-  .form-group input:focus,
-  .form-group select:focus,
-  .form-group textarea:focus {
-    border-color: var(--cyan);
-    box-shadow: 0 0 10px rgba(0,234,255,0.1);
-  }
-
-  .form-group select option { background: var(--dark2); }
-
-  .form-group textarea {
-    height: 120px;
-    resize: none;
-  }
-
-  .btn-submit {
-    width: 100%;
-    background: linear-gradient(135deg, var(--cyan), var(--blue));
-    color: var(--dark);
-    padding: 16px;
-    border: none;
-    border-radius: 2px;
-    font-family: 'Orbitron', monospace;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-
-  .btn-submit:hover {
-    box-shadow: 0 0 30px rgba(0,234,255,0.5);
-    transform: translateY(-2px);
-  }
-
-  /* ORDER MODAL */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(5,8,22,0.95);
-    backdrop-filter: blur(20px);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s;
-  }
-
-  .modal-overlay.active {
-    opacity: 1;
-    pointer-events: all;
-  }
-
-  .modal {
-    background: #080d22;
-    border: 1px solid var(--glass-border);
-    border-radius: 6px;
-    padding: 40px;
-    width: 100%;
-    max-width: 520px;
-    position: relative;
-    transform: translateY(30px);
-    transition: transform 0.3s;
-  }
-
-  .modal-overlay.active .modal {
-    transform: translateY(0);
-  }
-
-  .modal::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--cyan), var(--purple));
-    border-radius: 6px 6px 0 0;
-  }
-
-  .modal-close {
-    position: absolute;
-    top: 16px; right: 16px;
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
-    color: var(--muted);
-    width: 32px; height: 32px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s;
-  }
-
-  .modal-close:hover { color: white; border-color: var(--cyan); }
-
-  .modal-service-tag {
-    font-size: 9px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--cyan);
-    font-family: 'Orbitron', monospace;
-    margin-bottom: 10px;
-  }
-
-  .modal h2 {
-    font-family: 'Orbitron', monospace;
-    font-size: 18px;
-    color: white;
-    margin-bottom: 8px;
-    line-height: 1.3;
-  }
-
-  .modal-desc {
-    font-size: 13px;
-    color: var(--muted);
-    margin-bottom: 28px;
-    line-height: 1.6;
-  }
-
-  .modal-success {
-    text-align: center;
-    padding: 20px 0;
-    display: none;
-  }
-
-  .modal-success .success-icon {
-    font-size: 48px;
-    margin-bottom: 16px;
-    display: block;
-  }
-
-  .modal-success h3 {
-    font-family: 'Orbitron', monospace;
-    font-size: 16px;
-    color: var(--cyan);
-    margin-bottom: 10px;
-  }
-
-  .modal-success p { font-size: 13px; color: var(--muted); }
-
-  /* FOOTER */
-  footer {
-    position: relative;
-    z-index: 1;
-    border-top: 1px solid var(--glass-border);
-    background: rgba(5,8,22,0.9);
-    padding: 40px;
-  }
-
-  .footer-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: gap;
-    gap: 20px;
-  }
-
-  .footer-brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .footer-brand img { height: 36px; }
-
-  .footer-brand-name {
-    font-family: 'Orbitron', monospace;
-    font-size: 12px;
-    color: white;
-  }
-
-  .footer-brand-name span {
-    display: block;
-    font-size: 9px;
-    color: var(--muted);
-    letter-spacing: 2px;
-  }
-
-  .footer-links {
-    display: flex;
-    gap: 24px;
-    flex-wrap: wrap;
-  }
-
-  .footer-links a {
-    color: var(--muted);
-    text-decoration: none;
-    font-size: 12px;
-    letter-spacing: 1px;
-    transition: color 0.3s;
-  }
-
-  .footer-links a:hover { color: var(--cyan); }
-
-  .footer-copy {
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 1px;
-  }
-
-  /* DIVIDER */
-  .section-divider {
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
-    position: relative;
-    z-index: 1;
-  }
-
-  /* ANIMATIONS */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .fade-up {
-    opacity: 0;
-    transform: translateY(30px);
-    transition: all 0.7s ease;
-  }
-
-  .fade-up.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* SCROLLBAR */
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: var(--dark); }
-  ::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 2px; }
-
-  /* ABOUT */
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    align-items: center;
-  }
-
-  /* HAMBURGER */
-  .hamburger {
-    display: none;
-    flex-direction: column;
-    gap: 5px;
-    cursor: pointer;
-    padding: 8px;
-    border: 1px solid var(--glass-border);
-    border-radius: 4px;
-    background: var(--glass);
-    transition: all 0.3s;
-    z-index: 200;
-  }
-  .hamburger:hover { border-color: var(--cyan); }
-  .hamburger span {
-    display: block;
-    width: 22px; height: 2px;
-    background: var(--cyan);
-    border-radius: 2px;
-    transition: all 0.3s;
-  }
-  .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-  .hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-  .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-  .mobile-nav {
-    display: none;
-    position: fixed;
-    top: 69px; left: 0; right: 0;
-    background: rgba(5,8,22,0.98);
-    backdrop-filter: blur(30px);
-    border-bottom: 1px solid var(--glass-border);
-    padding: 16px;
-    z-index: 99;
-    flex-direction: column;
-    gap: 4px;
-  }
-  .mobile-nav.active { display: flex; }
-  .mobile-nav a {
-    color: var(--muted);
-    text-decoration: none;
-    font-family: 'Orbitron', monospace;
-    font-size: 12px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    padding: 14px 16px;
-    border-radius: 4px;
-    border: 1px solid transparent;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    transition: all 0.2s;
-  }
-  .mobile-nav a:active { color: var(--cyan); background: var(--glass); border-color: var(--glass-border); }
-  .mobile-nav a::after { content: '→'; color: var(--cyan); font-size: 14px; }
-  .mobile-nav-cta {
-    margin-top: 8px;
-    background: linear-gradient(135deg, var(--cyan), var(--blue)) !important;
-    color: var(--dark) !important;
-    font-weight: 700;
-    justify-content: center !important;
-  }
-  .mobile-nav-cta::after { display: none !important; }
-
-  /* ABOUT */
-  .about-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    align-items: center;
-  }
-
-  /* FULL MOBILE RESPONSIVE */
-  @media (max-width: 768px) {
-    .cursor, .cursor-ring { display: none; }
-    body { cursor: auto; }
-    nav { padding: 12px 20px; }
-    .nav-links { display: none; }
-    .hamburger { display: flex; }
-    .about-grid { grid-template-columns: 1fr; gap: 36px; }
-    .stats-bar { padding: 24px 20px; grid-template-columns: repeat(2,1fr); }
-    .stat-number { font-size: 22px; }
-    .hero { padding: 60px 20px 80px; min-height: 90vh; }
-    .hero p { font-size: 15px; }
-    .hero-btns { flex-direction: column; align-items: center; gap: 12px; }
-    .btn-primary, .btn-secondary { width: 100%; text-align: center; padding: 16px 20px; }
-    .hero-glow { width: 300px; height: 300px; }
-    section { padding: 60px 20px; }
-    .section-title { font-size: clamp(22px, 6vw, 32px); }
-    .services-grid { grid-template-columns: 1fr; gap: 14px; }
-    .service-card { padding: 24px; }
-    .ebooks-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; }
-    .ebook-cover-img { height: 240px; }
-    .platform-btns { gap: 6px; }
-    .btn-platform { padding: 10px 12px; }
-    .courses-banner { padding: 36px 20px; }
-    .contact-grid { grid-template-columns: 1fr; gap: 40px; }
-    .modal { padding: 28px 20px; margin: 10px; }
-    .modal h2 { font-size: 16px; }
-    .newsletter-bar { padding: 36px 20px; margin: 0 20px 60px; }
-    .newsletter-form { flex-direction: column; }
-    .newsletter-form input, .newsletter-form a { width: 100%; text-align: center; justify-content: center; }
-    footer { padding: 30px 20px; }
-    .footer-inner { flex-direction: column; align-items: flex-start; gap: 24px; }
-    .footer-links { gap: 14px; flex-wrap: wrap; }
-  }
-
-  @media (max-width: 380px) {
-    .hero h1 { font-size: 25px; }
-    .btn-platform { font-size: 9px; padding: 8px 10px; }
-    .platform-btns { flex-direction: column; }
-  }
-
-  @media (hover: none) {
-    .service-card:active { background: rgba(0,234,255,0.08); transform: scale(0.98); }
-    .btn-platform:active { transform: scale(0.96); }
-    .btn-primary:active, .btn-secondary:active { transform: scale(0.97); }
-  }
-
-  .about-text p {
-    color: var(--muted);
-    font-size: 15px;
-    line-height: 1.9;
-    margin-bottom: 20px;
-    font-weight: 300;
-  }
-
-  .about-features { }
-
-  .about-feature {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 20px;
-    padding: 20px;
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
-    border-radius: 4px;
-    transition: all 0.3s;
-  }
-
-  .about-feature:hover {
-    border-color: rgba(0,234,255,0.3);
-    background: rgba(0,234,255,0.05);
-  }
-
-  .about-feature-icon {
-    font-size: 24px;
-    flex-shrink: 0;
-    margin-top: 2px;
-  }
-
-  .about-feature h4 {
-    font-family: 'Orbitron', monospace;
-    font-size: 12px;
-    color: white;
-    margin-bottom: 6px;
-    letter-spacing: 1px;
-  }
-
-  .about-feature p {
-    font-size: 13px;
-    color: var(--muted);
-    margin: 0 !important;
-    line-height: 1.6;
-  }
-
-  /* NEWSLETTER */
-  .newsletter-bar {
-    background: linear-gradient(135deg, rgba(0,234,255,0.05), rgba(123,47,247,0.08));
-    border: 1px solid var(--glass-border);
-    border-radius: 4px;
-    padding: 50px;
-    text-align: center;
-    position: relative;
-    z-index: 1;
-    max-width: 1100px;
-    margin: 0 auto 80px;
-  }
-
-  .newsletter-bar h3 {
-    font-family: 'Orbitron', monospace;
-    font-size: 20px;
-    color: white;
-    margin-bottom: 12px;
-  }
-
-  .newsletter-bar p {
-    color: var(--muted);
-    font-size: 14px;
-    margin-bottom: 30px;
-  }
-
-  .newsletter-form {
-    display: flex;
-    gap: 12px;
-    max-width: 480px;
-    margin: 0 auto;
-  }
-
-  .newsletter-form input {
-    flex: 1;
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
-    color: var(--text);
-    padding: 14px 16px;
-    border-radius: 2px;
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.3s;
-  }
-
-  .newsletter-form input:focus { border-color: var(--cyan); }
-
-  .newsletter-form a {
-    background: linear-gradient(135deg, var(--cyan), var(--blue));
-    color: var(--dark);
-    padding: 14px 24px;
-    border-radius: 2px;
-    text-decoration: none;
-    font-family: 'Orbitron', monospace;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    white-space: nowrap;
-    transition: all 0.3s;
-    display: flex;
-    align-items: center;
-  }
-
-  .newsletter-form a:hover {
-    box-shadow: 0 0 20px rgba(0,234,255,0.4);
-  }
+:root {
+  --cyan: #00eaff;
+  --purple: #7b2ff7;
+  --blue: #1a6dff;
+  --dark: #050816;
+  --dark2: #0a0f2c;
+  --glass: rgba(0,234,255,0.05);
+  --glass-border: rgba(0,234,255,0.15);
+  --text: #e0e8ff;
+  --muted: #7a8ab0;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Rajdhani',sans-serif;background:var(--dark);color:var(--text);overflow-x:hidden;cursor:none;}
+
+/* CURSOR - desktop only */
+.cursor{width:12px;height:12px;background:var(--cyan);border-radius:50%;position:fixed;pointer-events:none;z-index:9999;transition:transform 0.1s;box-shadow:0 0 10px var(--cyan);}
+.cursor-ring{width:36px;height:36px;border:1px solid rgba(0,234,255,0.5);border-radius:50%;position:fixed;pointer-events:none;z-index:9998;transition:all 0.15s ease;}
+
+/* GRID BG */
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,234,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,234,255,0.03) 1px,transparent 1px);background-size:50px 50px;pointer-events:none;z-index:0;}
+
+/* SCROLL PROGRESS */
+.scroll-progress{position:fixed;top:0;right:0;width:3px;height:0%;background:linear-gradient(180deg,var(--cyan),var(--purple));z-index:9999;transition:height 0.1s;}
+
+/* NAVBAR */
+nav{display:flex;justify-content:space-between;align-items:center;padding:12px 40px;background:rgba(5,8,22,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--glass-border);position:sticky;top:0;z-index:500;}
+.nav-logo{display:flex;align-items:center;gap:12px;text-decoration:none;}
+.nav-logo img{height:44px;width:44px;object-fit:contain;}
+.nav-brand{font-family:'Orbitron',monospace;font-size:14px;font-weight:700;color:white;line-height:1.2;letter-spacing:1px;}
+.nav-brand span{display:block;font-size:9px;color:var(--cyan);letter-spacing:3px;font-weight:400;}
+.nav-links{display:flex;align-items:center;gap:30px;list-style:none;}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:13px;letter-spacing:2px;text-transform:uppercase;font-weight:500;transition:color 0.3s;position:relative;padding-bottom:4px;}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;background:var(--cyan);transition:width 0.3s;}
+.nav-links a:hover,.nav-links a.active{color:var(--cyan);}
+.nav-links a:hover::after,.nav-links a.active::after{width:100%;}
+.nav-cta{background:transparent!important;border:1px solid var(--cyan)!important;color:var(--cyan)!important;padding:8px 20px;border-radius:2px;font-family:'Orbitron',monospace;font-size:10px!important;letter-spacing:2px!important;transition:all 0.3s!important;}
+.nav-cta:hover{background:var(--cyan)!important;color:var(--dark)!important;box-shadow:0 0 20px rgba(0,234,255,0.4)!important;}
+.nav-cta::after{display:none!important;}
+.nav-cta.active{background:var(--cyan)!important;color:var(--dark)!important;}
+
+/* HAMBURGER */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:8px;border:1px solid var(--glass-border);border-radius:4px;background:var(--glass);transition:all 0.3s;z-index:200;}
+.hamburger:hover{border-color:var(--cyan);}
+.hamburger span{display:block;width:22px;height:2px;background:var(--cyan);border-radius:2px;transition:all 0.3s;}
+.hamburger.active span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.hamburger.active span:nth-child(2){opacity:0;transform:scaleX(0);}
+.hamburger.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+/* MOBILE NAV */
+.mobile-nav{display:none;position:fixed;top:69px;left:0;right:0;background:rgba(5,8,22,0.99);backdrop-filter:blur(30px);border-bottom:1px solid var(--glass-border);padding:16px;z-index:490;flex-direction:column;gap:4px;}
+.mobile-nav.active{display:flex;}
+.mobile-nav a{color:var(--muted);text-decoration:none;font-family:'Orbitron',monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;padding:16px;border-radius:4px;border:1px solid transparent;display:flex;align-items:center;justify-content:space-between;transition:all 0.2s;}
+.mobile-nav a:active,.mobile-nav a:hover{color:var(--cyan);background:var(--glass);border-color:var(--glass-border);}
+.mobile-nav a::after{content:'→';color:var(--cyan);font-size:14px;}
+.mobile-nav-cta{margin-top:8px;background:linear-gradient(135deg,var(--cyan),var(--blue))!important;color:var(--dark)!important;font-weight:700;justify-content:center!important;border-color:transparent!important;}
+.mobile-nav-cta::after{display:none!important;}
+
+/* SECTION BACKGROUNDS */
+.section-hero{background:linear-gradient(180deg,#050816 0%,#080d22 100%);}
+.section-about{background:linear-gradient(135deg,#06091a 0%,#080e20 50%,#050d1a 100%);border-left:none;position:relative;}
+.section-about::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,transparent,var(--cyan),transparent);}
+.section-services{background:linear-gradient(135deg,#04061a 0%,#060818 100%);}
+.section-ebooks{background:linear-gradient(135deg,#080618 0%,#0a0620 50%,#080518 100%);}
+.section-courses{background:linear-gradient(135deg,#060418 0%,#080620 100%);}
+.section-contact{background:linear-gradient(135deg,#030510 0%,#050712 100%);}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:80px 20px;position:relative;z-index:1;}
+.hero-glow{position:absolute;width:600px;height:600px;background:radial-gradient(circle,rgba(123,47,247,0.15) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;}
+.hero-glow2{position:absolute;width:400px;height:400px;background:radial-gradient(circle,rgba(0,234,255,0.08) 0%,transparent 70%);top:30%;left:30%;pointer-events:none;}
+.hero-content{position:relative;z-index:2;max-width:800px;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--glass-border);background:var(--glass);padding:8px 20px;border-radius:100px;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--cyan);margin-bottom:30px;animation:fadeUp 0.8s ease forwards;}
+.hero-badge::before{content:'';width:6px;height:6px;background:var(--cyan);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(0.8);}}
+.hero h1{font-family:'Orbitron',monospace;font-size:clamp(32px,6vw,62px);font-weight:900;line-height:1.1;margin-bottom:24px;animation:fadeUp 0.8s ease 0.2s both;}
+.hero h1 .line1{color:white;display:block;}
+.hero h1 .line2{display:block;background:linear-gradient(135deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero p{font-size:18px;color:var(--muted);max-width:560px;margin:0 auto 40px;line-height:1.7;font-weight:300;letter-spacing:0.5px;animation:fadeUp 0.8s ease 0.4s both;}
+.hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;animation:fadeUp 0.8s ease 0.6s both;}
+
+/* BUTTONS */
+.btn-primary{background:linear-gradient(135deg,var(--cyan),var(--blue));color:var(--dark);padding:14px 32px;border-radius:2px;text-decoration:none;font-family:'Orbitron',monospace;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;transition:all 0.3s;box-shadow:0 0 30px rgba(0,234,255,0.3);display:inline-block;}
+.btn-primary:hover{box-shadow:0 0 50px rgba(0,234,255,0.6);transform:translateY(-2px);}
+.btn-secondary{border:1px solid var(--glass-border);color:var(--text);padding:14px 32px;border-radius:2px;text-decoration:none;font-family:'Orbitron',monospace;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;transition:all 0.3s;background:var(--glass);backdrop-filter:blur(10px);display:inline-block;}
+.btn-secondary:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 20px rgba(0,234,255,0.1);}
+
+/* STATS BAR */
+.stats-bar{position:relative;z-index:1;border-top:1px solid var(--glass-border);border-bottom:1px solid var(--glass-border);background:rgba(0,234,255,0.02);padding:30px 40px;display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:20px;text-align:center;}
+.stat-number{font-family:'Orbitron',monospace;font-size:28px;font-weight:700;color:var(--cyan);display:block;}
+.stat-label{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:4px;}
+
+/* SECTIONS */
+section{position:relative;z-index:1;padding:100px 40px;max-width:1100px;margin:0 auto;}
+.section-wrap{position:relative;z-index:1;}
+.section-tag{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--cyan);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.section-tag::before{content:'';width:30px;height:1px;background:var(--cyan);}
+.section-title{font-family:'Orbitron',monospace;font-size:clamp(24px,4vw,38px);font-weight:700;color:white;margin-bottom:16px;line-height:1.2;}
+.section-sub{color:var(--muted);font-size:16px;max-width:560px;line-height:1.7;margin-bottom:60px;font-weight:300;}
+
+/* SERVICES */
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;}
+.service-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:4px;padding:30px;position:relative;overflow:hidden;transition:all 0.4s;cursor:pointer;}
+.service-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--purple));transform:scaleX(0);transition:transform 0.4s;}
+.service-card:hover{background:rgba(0,234,255,0.08);border-color:rgba(0,234,255,0.3);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+.service-card:hover::before{transform:scaleX(1);}
+.service-icon{font-size:32px;margin-bottom:16px;display:block;}
+.service-card h3{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;letter-spacing:1px;color:white;margin-bottom:10px;}
+.service-card p{font-size:14px;color:var(--muted);line-height:1.7;font-weight:300;margin-bottom:20px;}
+.service-card-footer{display:flex;align-items:center;justify-content:space-between;margin-top:auto;}
+
+/* ORDER BUTTON - clearly visible */
+.btn-order{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,rgba(0,234,255,0.15),rgba(26,109,255,0.15));border:1px solid var(--cyan);color:var(--cyan);padding:10px 18px;border-radius:3px;font-family:'Orbitron',monospace;font-size:10px;font-weight:700;letter-spacing:1px;transition:all 0.3s;text-transform:uppercase;}
+.btn-order:hover{background:linear-gradient(135deg,rgba(0,234,255,0.3),rgba(26,109,255,0.3));box-shadow:0 0 20px rgba(0,234,255,0.4);transform:translateY(-1px);}
+.btn-order .arrow{transition:transform 0.3s;}
+.service-card:hover .btn-order .arrow{transform:translateX(4px);}
+
+/* BADGES */
+.coming-soon-badge{display:inline-block;background:rgba(123,47,247,0.2);border:1px solid rgba(123,47,247,0.4);color:#b57bff;font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:100px;font-family:'Orbitron',monospace;}
+.available-badge{display:inline-block;background:rgba(0,234,255,0.1);border:1px solid rgba(0,234,255,0.3);color:var(--cyan);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:100px;font-family:'Orbitron',monospace;}
+
+/* EBOOKS */
+.ebooks-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;}
+.ebook-card{background:var(--glass);border:1px solid var(--glass-border);border-radius:4px;overflow:hidden;transition:all 0.4s;}
+.ebook-card:hover{transform:translateY(-6px);box-shadow:0 30px 80px rgba(0,0,0,0.6);border-color:rgba(123,47,247,0.4);}
+.ebook-cover-img{height:260px;overflow:hidden;position:relative;}
+.ebook-cover-img img{width:100%;height:100%;object-fit:cover;object-position:top;transition:transform 0.4s;}
+.ebook-card:hover .ebook-cover-img img{transform:scale(1.03);}
+.ebook-cover-placeholder{height:200px;background:linear-gradient(135deg,rgba(0,234,255,0.1),rgba(123,47,247,0.2));display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;}
+.ebook-cover-placeholder span:last-child{font-family:'Orbitron',monospace;font-size:11px;letter-spacing:2px;color:var(--cyan);opacity:0.7;}
+.ebook-body{padding:24px;}
+.ebook-tag{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--cyan);margin-bottom:10px;font-family:'Orbitron',monospace;}
+.ebook-card h3{font-family:'Orbitron',monospace;font-size:13px;color:white;margin-bottom:10px;line-height:1.4;}
+.ebook-card p{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:20px;}
+.ebook-platforms{margin-top:16px;}
+.platform-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-family:'Orbitron',monospace;display:block;margin-bottom:10px;}
+.platform-btns{display:flex;gap:8px;flex-wrap:wrap;}
+.btn-platform{display:flex;align-items:center;gap:6px;padding:10px 14px;border-radius:3px;text-decoration:none;font-family:'Orbitron',monospace;font-size:10px;font-weight:700;letter-spacing:1px;transition:all 0.3s;border:1px solid transparent;}
+.btn-amazon{background:rgba(255,153,0,0.15);border-color:rgba(255,153,0,0.4);color:#ff9900;}
+.btn-amazon:hover{background:rgba(255,153,0,0.25);box-shadow:0 0 15px rgba(255,153,0,0.3);transform:translateY(-2px);}
+.btn-gumroad{background:rgba(255,144,104,0.15);border-color:rgba(255,144,104,0.4);color:#ff9068;}
+.btn-gumroad:hover{background:rgba(255,144,104,0.25);box-shadow:0 0 15px rgba(255,144,104,0.3);transform:translateY(-2px);}
+.btn-payhip{background:rgba(0,150,255,0.15);border-color:rgba(0,150,255,0.4);color:#0096ff;}
+.btn-payhip:hover{background:rgba(0,150,255,0.25);box-shadow:0 0 15px rgba(0,150,255,0.3);transform:translateY(-2px);}
+
+/* COURSES */
+.courses-banner{background:linear-gradient(135deg,rgba(123,47,247,0.1),rgba(0,234,255,0.05));border:1px solid rgba(123,47,247,0.3);border-radius:4px;padding:60px;text-align:center;position:relative;overflow:hidden;}
+.courses-banner::before{content:'COMING SOON';position:absolute;top:20px;right:-30px;background:var(--purple);color:white;font-family:'Orbitron',monospace;font-size:10px;letter-spacing:2px;padding:6px 50px;transform:rotate(45deg);}
+.courses-banner h3{font-family:'Orbitron',monospace;font-size:24px;color:white;margin-bottom:16px;}
+.courses-banner p{color:var(--muted);font-size:15px;max-width:500px;margin:0 auto 30px;line-height:1.7;}
+.course-topics{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:30px;}
+.topic-tag{border:1px solid var(--glass-border);color:var(--muted);padding:6px 16px;border-radius:100px;font-size:11px;letter-spacing:1px;}
+
+/* CONTACT */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
+.contact-info h3{font-family:'Orbitron',monospace;font-size:13px;color:white;margin-bottom:30px;letter-spacing:1px;}
+.contact-item{display:flex;align-items:flex-start;gap:16px;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--glass-border);}
+.contact-item:last-child{border-bottom:none;}
+.contact-icon{width:40px;height:40px;background:var(--glass);border:1px solid var(--glass-border);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.contact-item-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;font-family:'Orbitron',monospace;}
+.contact-item-value{font-size:14px;color:var(--text);}
+.contact-item-value a{color:var(--cyan);text-decoration:none;}
+.contact-form h3{font-family:'Orbitron',monospace;font-size:13px;color:white;margin-bottom:30px;letter-spacing:1px;}
+.form-group{margin-bottom:20px;}
+.form-group label{display:block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;font-family:'Orbitron',monospace;}
+.form-group input,.form-group select,.form-group textarea{width:100%;background:var(--glass);border:1px solid var(--glass-border);color:var(--text);padding:14px 16px;border-radius:2px;font-family:'Rajdhani',sans-serif;font-size:14px;outline:none;transition:border-color 0.3s;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--cyan);box-shadow:0 0 10px rgba(0,234,255,0.1);}
+.form-group select option{background:var(--dark2);}
+.form-group textarea{height:120px;resize:none;}
+.btn-submit{width:100%;background:linear-gradient(135deg,var(--cyan),var(--blue));color:var(--dark);padding:16px;border:none;border-radius:2px;font-family:'Orbitron',monospace;font-size:12px;font-weight:700;letter-spacing:2px;cursor:pointer;transition:all 0.3s;}
+.btn-submit:hover{box-shadow:0 0 30px rgba(0,234,255,0.5);transform:translateY(-2px);}
+
+/* FLOATING CONTACT BUTTON - contact section only */
+.float-contact{position:fixed;bottom:90px;right:24px;background:linear-gradient(135deg,var(--cyan),var(--blue));color:var(--dark);width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;z-index:400;box-shadow:0 0 20px rgba(0,234,255,0.5);transition:all 0.4s;opacity:0;pointer-events:none;transform:scale(0.8);}
+.float-contact.visible{opacity:1;pointer-events:all;transform:scale(1);}
+.float-contact:hover{box-shadow:0 0 40px rgba(0,234,255,0.8);transform:scale(1.1);}
+.float-contact-tooltip{position:absolute;right:64px;background:rgba(5,8,22,0.95);border:1px solid var(--glass-border);color:var(--cyan);font-family:'Orbitron',monospace;font-size:9px;letter-spacing:1px;padding:6px 12px;border-radius:3px;white-space:nowrap;opacity:0;transition:opacity 0.3s;}
+.float-contact:hover .float-contact-tooltip{opacity:1;}
+
+/* MOBILE BOTTOM NAV */
+.mobile-bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(5,8,22,0.97);backdrop-filter:blur(20px);border-top:1px solid var(--glass-border);z-index:480;padding:8px 0 12px;}
+.mobile-bottom-nav-inner{display:flex;justify-content:space-around;align-items:center;}
+.mob-nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;text-decoration:none;color:var(--muted);transition:all 0.3s;padding:4px 16px;border-radius:8px;min-width:60px;}
+.mob-nav-item.active,.mob-nav-item:active{color:var(--cyan);}
+.mob-nav-item .mob-icon{font-size:20px;transition:transform 0.3s;}
+.mob-nav-item.active .mob-icon{transform:translateY(-2px);}
+.mob-nav-label{font-family:'Orbitron',monospace;font-size:8px;letter-spacing:1px;text-transform:uppercase;}
+
+/* ORDER MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(5,8,22,0.95);backdrop-filter:blur(20px);z-index:600;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity 0.3s;}
+.modal-overlay.active{opacity:1;pointer-events:all;}
+.modal{background:#080d22;border:1px solid var(--glass-border);border-radius:6px;padding:36px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;position:relative;transform:translateY(30px);transition:transform 0.3s;}
+.modal-overlay.active .modal{transform:translateY(0);}
+.modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--cyan),var(--purple));border-radius:6px 6px 0 0;}
+.modal-close{position:absolute;top:14px;right:14px;background:var(--glass);border:1px solid var(--glass-border);color:var(--muted);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all 0.3s;}
+.modal-close:hover{color:white;border-color:var(--cyan);}
+.modal-service-tag{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--cyan);font-family:'Orbitron',monospace;margin-bottom:8px;}
+.modal h2{font-family:'Orbitron',monospace;font-size:16px;color:white;margin-bottom:6px;line-height:1.3;}
+.modal-desc{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.6;}
+.modal-success{text-align:center;padding:20px 0;display:none;}
+.modal-success .success-icon{font-size:48px;margin-bottom:16px;display:block;}
+.modal-success h3{font-family:'Orbitron',monospace;font-size:16px;color:var(--cyan);margin-bottom:10px;}
+.modal-success p{font-size:13px;color:var(--muted);}
+
+/* FOOTER */
+footer{position:relative;z-index:1;border-top:1px solid var(--glass-border);background:rgba(3,5,16,0.98);padding:40px;}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px;}
+.footer-brand{display:flex;align-items:center;gap:12px;}
+.footer-brand img{height:36px;}
+.footer-brand-name{font-family:'Orbitron',monospace;font-size:12px;color:white;}
+.footer-brand-name span{display:block;font-size:9px;color:var(--muted);letter-spacing:2px;}
+.footer-links{display:flex;gap:24px;flex-wrap:wrap;}
+.footer-links a{color:var(--muted);text-decoration:none;font-size:12px;letter-spacing:1px;transition:color 0.3s;}
+.footer-links a:hover{color:var(--cyan);}
+.footer-copy{font-size:11px;color:var(--muted);letter-spacing:1px;}
+
+/* DIVIDER */
+.section-divider{width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--glass-border),transparent);position:relative;z-index:1;}
+
+/* NEWSLETTER */
+.newsletter-bar{background:linear-gradient(135deg,rgba(0,234,255,0.05),rgba(123,47,247,0.08));border:1px solid var(--glass-border);border-radius:4px;padding:50px;text-align:center;position:relative;z-index:1;max-width:1100px;margin:0 auto 80px;}
+.newsletter-bar h3{font-family:'Orbitron',monospace;font-size:20px;color:white;margin-bottom:12px;}
+.newsletter-bar p{color:var(--muted);font-size:14px;margin-bottom:30px;}
+.newsletter-form{display:flex;gap:12px;max-width:480px;margin:0 auto;}
+.newsletter-form input{flex:1;background:var(--glass);border:1px solid var(--glass-border);color:var(--text);padding:14px 16px;border-radius:2px;font-family:'Rajdhani',sans-serif;font-size:14px;outline:none;transition:border-color 0.3s;}
+.newsletter-form input:focus{border-color:var(--cyan);}
+.newsletter-form a{background:linear-gradient(135deg,var(--cyan),var(--blue));color:var(--dark);padding:14px 24px;border-radius:2px;text-decoration:none;font-family:'Orbitron',monospace;font-size:10px;font-weight:700;letter-spacing:1px;white-space:nowrap;transition:all 0.3s;display:flex;align-items:center;}
+.newsletter-form a:hover{box-shadow:0 0 20px rgba(0,234,255,0.4);}
+
+/* ABOUT */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+.about-text p{color:var(--muted);font-size:15px;line-height:1.9;margin-bottom:20px;font-weight:300;}
+.about-feature{display:flex;gap:16px;margin-bottom:20px;padding:20px;background:var(--glass);border:1px solid var(--glass-border);border-radius:4px;transition:all 0.3s;}
+.about-feature:hover{border-color:rgba(0,234,255,0.3);background:rgba(0,234,255,0.05);}
+.about-feature-icon{font-size:24px;flex-shrink:0;margin-top:2px;}
+.about-feature h4{font-family:'Orbitron',monospace;font-size:12px;color:white;margin-bottom:6px;letter-spacing:1px;}
+.about-feature p{font-size:13px;color:var(--muted);margin:0!important;line-height:1.6;}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+.fade-up{opacity:0;transform:translateY(30px);transition:all 0.7s ease;}
+.fade-up.visible{opacity:1;transform:translateY(0);}
+.slide-left{opacity:0;transform:translateX(-40px);transition:all 0.7s ease;}
+.slide-left.visible{opacity:1;transform:translateX(0);}
+.slide-right{opacity:0;transform:translateX(40px);transition:all 0.7s ease;}
+.slide-right.visible{opacity:1;transform:translateX(0);}
+.scale-in{opacity:0;transform:scale(0.9);transition:all 0.6s ease;}
+.scale-in.visible{opacity:1;transform:scale(1);}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--dark);}
+::-webkit-scrollbar-thumb{background:var(--purple);border-radius:2px;}
+
+/* FULL MOBILE RESPONSIVE */
+@media(max-width:768px){
+  .cursor,.cursor-ring{display:none;}
+  body{cursor:auto;}
+  nav{padding:12px 20px;}
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  .mobile-bottom-nav{display:block;}
+  .float-contact{bottom:80px;}
+  section{padding:60px 20px 80px;}
+  .section-title{font-size:clamp(20px,6vw,30px);}
+  .section-sub{font-size:14px;margin-bottom:40px;}
+  .hero{padding:60px 20px 100px;min-height:90vh;}
+  .hero p{font-size:15px;}
+  .hero-btns{flex-direction:column;align-items:center;gap:12px;}
+  .btn-primary,.btn-secondary{width:100%;text-align:center;padding:16px 20px;}
+  .hero-glow{width:280px;height:280px;}
+  .stats-bar{padding:24px 20px;grid-template-columns:repeat(2,1fr);gap:20px;}
+  .stat-number{font-size:22px;}
+  .about-grid{grid-template-columns:1fr;gap:36px;}
+  .section-about::before{display:none;}
+  .services-grid{grid-template-columns:1fr;gap:14px;}
+  .service-card{padding:22px;}
+  .ebooks-grid{grid-template-columns:1fr;max-width:420px;margin:0 auto;}
+  .ebook-cover-img{height:220px;}
+  .platform-btns{gap:6px;}
+  .btn-platform{padding:10px 12px;font-size:10px;}
+  .courses-banner{padding:40px 20px;}
+  .contact-grid{grid-template-columns:1fr;gap:40px;}
+  .modal{padding:24px 18px;margin:8px;max-height:85vh;}
+  .modal h2{font-size:14px;}
+  .modal-desc{font-size:12px;margin-bottom:16px;}
+  .form-group{margin-bottom:14px;}
+  .form-group input,.form-group select,.form-group textarea{padding:12px 14px;font-size:15px;}
+  .form-group textarea{height:100px;}
+  .newsletter-bar{padding:36px 20px;margin:0 16px 60px;}
+  .newsletter-form{flex-direction:column;}
+  .newsletter-form input,.newsletter-form a{width:100%;text-align:center;justify-content:center;}
+  footer{padding:30px 20px 100px;}
+  .footer-inner{flex-direction:column;align-items:flex-start;gap:20px;}
+  .footer-links{gap:14px;flex-wrap:wrap;}
+}
+@media(max-width:380px){
+  .hero h1{font-size:24px;}
+  .btn-platform{font-size:9px;padding:8px 10px;}
+  .platform-btns{flex-direction:column;}
+  .mob-nav-item{padding:4px 10px;}
+}
+@media(hover:none){
+  .service-card:active{background:rgba(0,234,255,0.08);transform:scale(0.98);}
+  .btn-platform:active{transform:scale(0.96);}
+  .btn-primary:active,.btn-secondary:active{transform:scale(0.97);}
+  .btn-order:active{transform:scale(0.96);}
+}
 </style>
 </head>
 <body>
 
-<!-- CURSOR -->
+<div class="scroll-progress" id="scrollProgress"></div>
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
 
@@ -1318,26 +326,21 @@
 <nav>
   <a href="#" class="nav-logo">
     <img src="logo.png" alt="FutureStack Intelligence">
-    <div class="nav-brand">
-      FutureStack
-      <span>Intelligence</span>
-    </div>
+    <div class="nav-brand">FutureStack<span>Intelligence</span></div>
   </a>
   <ul class="nav-links">
-    <li><a href="#about">About</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#ebooks">Ebooks</a></li>
-    <li><a href="#courses">Courses</a></li>
-    <li><a href="#contact" class="nav-cta">Work With Us</a></li>
+    <li><a href="#about" data-section="about">About</a></li>
+    <li><a href="#services" data-section="services">Services</a></li>
+    <li><a href="#ebooks" data-section="ebooks">Ebooks</a></li>
+    <li><a href="#courses" data-section="courses">Courses</a></li>
+    <li><a href="#contact" class="nav-cta" data-section="contact">Work With Us</a></li>
   </ul>
   <div class="hamburger" id="hamburger" onclick="toggleMenu()">
-    <span></span>
-    <span></span>
-    <span></span>
+    <span></span><span></span><span></span>
   </div>
 </nav>
 
-<!-- MOBILE NAV MENU -->
+<!-- MOBILE NAV -->
 <div class="mobile-nav" id="mobileNav">
   <a href="#about" onclick="closeMenu()">About</a>
   <a href="#services" onclick="closeMenu()">Services</a>
@@ -1347,201 +350,164 @@
 </div>
 
 <!-- HERO -->
-<div class="hero">
-  <div class="hero-glow"></div>
-  <div class="hero-glow2"></div>
-  <div class="hero-content">
-    <div class="hero-badge">🟢 Now Accepting Clients</div>
-    <h1>
-      <span class="line1">Automating The Future.</span>
-      <span class="line2">Securing The Present.</span>
-    </h1>
-    <p>AI automation, cybersecurity, and intelligent systems for businesses ready to operate at the next level. Built for results. Delivered with precision.</p>
-    <div class="hero-btns">
-      <a href="#services" class="btn-primary">Explore Services</a>
-      <a href="#ebooks" class="btn-secondary">Browse Ebooks</a>
+<div class="section-wrap section-hero" id="home">
+  <div class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-glow2"></div>
+    <div class="hero-content">
+      <div class="hero-badge">🟢 Now Accepting Clients</div>
+      <h1>
+        <span class="line1">Automating The Future.</span>
+        <span class="line2">Securing The Present.</span>
+      </h1>
+      <p>AI automation, cybersecurity, and intelligent systems for businesses ready to operate at the next level. Built for results. Delivered with precision.</p>
+      <div class="hero-btns">
+        <a href="#services" class="btn-primary">Explore Services</a>
+        <a href="#ebooks" class="btn-secondary">Browse Ebooks</a>
+      </div>
     </div>
   </div>
-</div>
-
-<!-- STATS BAR -->
-<div class="stats-bar">
-  <div class="stat-item">
-    <span class="stat-number">4+</span>
-    <span class="stat-label">Core Services</span>
-  </div>
-  <div class="stat-item">
-    <span class="stat-number">24/7</span>
-    <span class="stat-label">Automation Uptime</span>
-  </div>
-  <div class="stat-item">
-    <span class="stat-number">100%</span>
-    <span class="stat-label">Remote Delivery</span>
-  </div>
-  <div class="stat-item">
-    <span class="stat-number">$→₦</span>
-    <span class="stat-label">Global Payments</span>
+  <div class="stats-bar">
+    <div class="stat-item"><span class="stat-number">6+</span><span class="stat-label">Core Services</span></div>
+    <div class="stat-item"><span class="stat-number">24/7</span><span class="stat-label">Automation Uptime</span></div>
+    <div class="stat-item"><span class="stat-number">100%</span><span class="stat-label">Remote Delivery</span></div>
+    <div class="stat-item"><span class="stat-number">$→₦</span><span class="stat-label">Global Payments</span></div>
   </div>
 </div>
-
-<div class="section-divider"></div>
 
 <!-- ABOUT -->
-<section id="about">
-  <div class="about-grid fade-up">
-    <div class="about-text">
-      <div class="section-tag">Who We Are</div>
-      <h2 class="section-title">Built On Intelligence. Driven By Results.</h2>
-      <p>FutureStack Intelligence is a technology solutions brand focused on AI automation, cybersecurity, and practical digital systems for businesses worldwide.</p>
-      <p>We build workflows that eliminate manual work, secure digital assets from threats, and create intelligent systems that run while you focus on growth. Our knowledge is packaged into ebooks, services, and soon — certified courses.</p>
-      <p>Operating globally. Delivering remotely. Accepting payments worldwide.</p>
-    </div>
-    <div class="about-features">
-      <div class="about-feature">
-        <div class="about-feature-icon">🤖</div>
-        <div>
-          <h4>AI-Powered Workflows</h4>
-          <p>Automations that think, adapt, and execute without human intervention using cutting-edge AI tools.</p>
-        </div>
+<div class="section-wrap section-about">
+  <section id="about">
+    <div class="about-grid">
+      <div class="about-text slide-left">
+        <div class="section-tag">Who We Are</div>
+        <h2 class="section-title">Built On Intelligence. Driven By Results.</h2>
+        <p>FutureStack Intelligence is a technology solutions brand focused on AI automation, cybersecurity, and practical digital systems for businesses worldwide.</p>
+        <p>We build workflows that eliminate manual work, secure digital assets from threats, and create intelligent systems that run while you focus on growth.</p>
+        <p>Operating globally. Delivering remotely. Accepting payments worldwide.</p>
       </div>
-      <div class="about-feature">
-        <div class="about-feature-icon">🔐</div>
-        <div>
-          <h4>Cybersecurity Focus</h4>
-          <p>Protecting digital assets, identifying vulnerabilities, and securing systems before threats emerge.</p>
+      <div class="slide-right">
+        <div class="about-feature">
+          <div class="about-feature-icon">🤖</div>
+          <div><h4>AI-Powered Workflows</h4><p>Automations that think, adapt, and execute without human intervention using cutting-edge AI tools.</p></div>
         </div>
-      </div>
-      <div class="about-feature">
-        <div class="about-feature-icon">📚</div>
-        <div>
-          <h4>Knowledge Products</h4>
-          <p>Real-world tech knowledge packaged into practical ebooks and upcoming certified courses.</p>
+        <div class="about-feature">
+          <div class="about-feature-icon">🔐</div>
+          <div><h4>Cybersecurity Focus</h4><p>Protecting digital assets, identifying vulnerabilities, and securing systems before threats emerge.</p></div>
+        </div>
+        <div class="about-feature">
+          <div class="about-feature-icon">📚</div>
+          <div><h4>Knowledge Products</h4><p>Real-world tech knowledge packaged into practical ebooks and upcoming certified courses.</p></div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
+</div>
 
 <div class="section-divider"></div>
 
 <!-- SERVICES -->
-<section id="services">
-  <div class="fade-up">
-    <div class="section-tag">What We Do</div>
-    <h2 class="section-title">Our Services</h2>
-    <p class="section-sub">From intelligent automation to security hardening — we build and deliver solutions that move your business forward.</p>
-  </div>
+<div class="section-wrap section-services">
+  <section id="services">
+    <div class="fade-up">
+      <div class="section-tag">What We Do</div>
+      <h2 class="section-title">Our Services</h2>
+      <p class="section-sub">From intelligent automation to security hardening — click any available service to place your order directly.</p>
+    </div>
+    <div class="services-grid fade-up">
 
-  <div class="services-grid fade-up">
-
-    <div class="service-card" onclick="openOrder('AI Workflow Automation', 'Build end-to-end automated workflows using Make.com and n8n that eliminate repetitive manual tasks and run 24/7.')">
-      <span class="service-icon">⚡</span>
-      <h3>AI Workflow Automation</h3>
-      <p>We build end-to-end automated workflows using Make.com and n8n that eliminate repetitive manual tasks, connect your tools, and run 24/7 without human input.</p>
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-top:16px;">
-        <span class="available-badge">● Available Now</span>
-        <span style="font-size:11px; color:var(--cyan); letter-spacing:1px; font-family:'Orbitron',monospace;">Order →</span>
+      <div class="service-card" onclick="openOrder('AI Workflow Automation','Build end-to-end automated workflows using Make.com and n8n that eliminate repetitive manual tasks and run 24/7.')">
+        <span class="service-icon">⚡</span>
+        <h3>AI Workflow Automation</h3>
+        <p>End-to-end automated workflows using Make.com and n8n that eliminate repetitive manual tasks, connect your tools, and run 24/7 without human input.</p>
+        <div class="service-card-footer">
+          <span class="available-badge">● Available Now</span>
+          <div class="btn-order">Order Now <span class="arrow">→</span></div>
+        </div>
       </div>
-    </div>
 
-    <div class="service-card" onclick="openOrder('Shopify Store Automation', 'Abandoned cart recovery, order notifications, customer email sequences, inventory alerts and review requests — fully automated.')">
-      <span class="service-icon">🛒</span>
-      <h3>Shopify Store Automation</h3>
-      <p>Abandoned cart recovery, order notifications, customer email sequences, inventory alerts and review requests — fully automated for your Shopify store.</p>
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-top:16px;">
-        <span class="available-badge">● Available Now</span>
-        <span style="font-size:11px; color:var(--cyan); letter-spacing:1px; font-family:'Orbitron',monospace;">Order →</span>
+      <div class="service-card" onclick="openOrder('Shopify Store Automation','Abandoned cart recovery, order notifications, customer email sequences, inventory alerts and review requests — fully automated.')">
+        <span class="service-icon">🛒</span>
+        <h3>Shopify Store Automation</h3>
+        <p>Abandoned cart recovery, order notifications, customer email sequences, inventory alerts and review requests — fully automated for your Shopify store.</p>
+        <div class="service-card-footer">
+          <span class="available-badge">● Available Now</span>
+          <div class="btn-order">Order Now <span class="arrow">→</span></div>
+        </div>
       </div>
-    </div>
 
-    <div class="service-card" onclick="openOrder('Cybersecurity Services', 'Vulnerability assessments, penetration testing, security audits and digital asset protection for your business.')">
-      <span class="service-icon">🔐</span>
-      <h3>Cybersecurity Services</h3>
-      <p>Vulnerability assessments, penetration testing, security audits, and digital asset protection for businesses that take their security seriously.</p>
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-top:16px;">
-        <span class="available-badge">● Available Now</span>
-        <span style="font-size:11px; color:var(--cyan); letter-spacing:1px; font-family:'Orbitron',monospace;">Order →</span>
+      <div class="service-card" onclick="openOrder('Cybersecurity Services','Vulnerability assessments, penetration testing, security audits and digital asset protection for your business.')">
+        <span class="service-icon">🔐</span>
+        <h3>Cybersecurity Services</h3>
+        <p>Vulnerability assessments, penetration testing, security audits, and digital asset protection for businesses that take their security seriously.</p>
+        <div class="service-card-footer">
+          <span class="available-badge">● Available Now</span>
+          <div class="btn-order">Order Now <span class="arrow">→</span></div>
+        </div>
       </div>
-    </div>
 
-    <div class="service-card" onclick="openOrder('AI Chatbot & Support Systems', 'Intelligent AI-powered chatbots for websites and stores that handle customer queries and respond instantly around the clock.')">
-      <span class="service-icon">🤖</span>
-      <h3>AI Chatbot & Support Systems</h3>
-      <p>Intelligent AI-powered chatbots for websites and stores that handle customer queries, qualify leads, and respond instantly around the clock.</p>
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-top:16px;">
-        <span class="available-badge">● Available Now</span>
-        <span style="font-size:11px; color:var(--cyan); letter-spacing:1px; font-family:'Orbitron',monospace;">Order →</span>
+      <div class="service-card" onclick="openOrder('AI Chatbot & Support Systems','Intelligent AI-powered chatbots for websites and stores that handle customer queries and respond instantly around the clock.')">
+        <span class="service-icon">🤖</span>
+        <h3>AI Chatbot & Support Systems</h3>
+        <p>Intelligent AI-powered chatbots for websites and stores that handle customer queries, qualify leads, and respond instantly around the clock.</p>
+        <div class="service-card-footer">
+          <span class="available-badge">● Available Now</span>
+          <div class="btn-order">Order Now <span class="arrow">→</span></div>
+        </div>
       </div>
-    </div>
 
-    <div class="service-card" style="cursor:default;">
-      <span class="service-icon">☁️</span>
-      <h3>Cloud Computing</h3>
-      <p>Cloud infrastructure setup, migration, and management services to scale your business operations securely and efficiently in the cloud.</p>
-      <span class="coming-soon-badge">⏳ Coming Soon</span>
-    </div>
-
-    <div class="service-card" onclick="openOrder('Data & Reporting Automation', 'Automated data collection, processing and reporting systems that give you business intelligence without manual spreadsheet work.')">
-      <span class="service-icon">📊</span>
-      <h3>Data & Reporting Automation</h3>
-      <p>Automated data collection, processing, and reporting systems that give you business intelligence without manual spreadsheet work.</p>
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-top:16px;">
-        <span class="available-badge">● Available Now</span>
-        <span style="font-size:11px; color:var(--cyan); letter-spacing:1px; font-family:'Orbitron',monospace;">Order →</span>
+      <div class="service-card" onclick="openOrder('Cloud Computing & Cloud Security','Cloud infrastructure setup, migration, management and security hardening services to scale your business safely in the cloud.')">
+        <span class="service-icon">☁️</span>
+        <h3>Cloud Computing & Cloud Security</h3>
+        <p>Cloud infrastructure setup, migration, management and security hardening — scale your business operations safely and efficiently in the cloud.</p>
+        <div class="service-card-footer">
+          <span class="available-badge">● Available Now</span>
+          <div class="btn-order">Order Now <span class="arrow">→</span></div>
+        </div>
       </div>
-    </div>
 
-  </div>
-</section>
+      <div class="service-card" onclick="openOrder('Data & Reporting Automation','Automated data collection, processing and reporting systems that give you business intelligence without manual spreadsheet work.')">
+        <span class="service-icon">📊</span>
+        <h3>Data & Reporting Automation</h3>
+        <p>Automated data collection, processing, and reporting systems that give you business intelligence without manual spreadsheet work.</p>
+        <div class="service-card-footer">
+          <span class="available-badge">● Available Now</span>
+          <div class="btn-order">Order Now <span class="arrow">→</span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
 
 <!-- ORDER MODAL -->
 <div class="modal-overlay" id="orderModal">
   <div class="modal">
     <button class="modal-close" onclick="closeOrder()">✕</button>
-
     <div id="modalForm">
       <div class="modal-service-tag">Service Order</div>
       <h2 id="modalTitle">Service Name</h2>
       <p class="modal-desc" id="modalDesc">Service description here.</p>
-
       <form action="https://formspree.io/f/xbdqnerv" method="POST" onsubmit="handleModalSubmit(event)">
         <input type="hidden" name="service" id="modalServiceInput" value="" />
-
-        <div class="form-group">
-          <label>Your Name</label>
-          <input type="text" name="name" placeholder="John Smith" required />
-        </div>
-
-        <div class="form-group">
-          <label>Email Address</label>
-          <input type="email" name="email" placeholder="john@example.com" required />
-        </div>
-
+        <div class="form-group"><label>Your Name</label><input type="text" name="name" placeholder="John Smith" required /></div>
+        <div class="form-group"><label>Email Address</label><input type="email" name="email" placeholder="john@example.com" required /></div>
         <div class="form-group">
           <label>Your Budget (Optional)</label>
           <select name="budget">
             <option value="">Select budget range...</option>
-            <option>Under $100</option>
-            <option>$100 - $500</option>
-            <option>$500 - $1,000</option>
-            <option>$1,000 - $3,000</option>
-            <option>$3,000+</option>
+            <option>Under $100</option><option>$100 - $500</option>
+            <option>$500 - $1,000</option><option>$1,000 - $3,000</option><option>$3,000+</option>
           </select>
         </div>
-
-        <div class="form-group">
-          <label>Tell Us About Your Project</label>
-          <textarea name="message" placeholder="Describe what you need, your timeline, any specific requirements..." required></textarea>
-        </div>
-
+        <div class="form-group"><label>Tell Us About Your Project</label><textarea name="message" placeholder="Describe what you need, your timeline, any specific requirements..." required></textarea></div>
         <button type="submit" class="btn-submit">Send Order Request →</button>
       </form>
     </div>
-
     <div class="modal-success" id="modalSuccess">
       <span class="success-icon">✅</span>
       <h3>Order Request Sent!</h3>
-      <p>We received your request for <strong id="successService"></strong>. We'll reply to your email within 24 hours.</p>
+      <p>We received your request for <strong id="successService"></strong>. We'll reply within 24 hours.</p>
     </div>
   </div>
 </div>
@@ -1549,123 +515,105 @@
 <div class="section-divider"></div>
 
 <!-- EBOOKS -->
-<section id="ebooks">
-  <div class="fade-up">
-    <div class="section-tag">Knowledge Products</div>
-    <h2 class="section-title">Ebooks & Resources</h2>
-    <p class="section-sub">Practical, no-fluff tech knowledge written for people who want to understand and apply — not just read.</p>
-  </div>
+<div class="section-wrap section-ebooks">
+  <section id="ebooks">
+    <div class="fade-up">
+      <div class="section-tag">Knowledge Products</div>
+      <h2 class="section-title">Ebooks & Resources</h2>
+      <p class="section-sub">Practical, no-fluff tech knowledge written for people who want to understand and apply — not just read.</p>
+    </div>
+    <div class="ebooks-grid scale-in">
 
-  <div class="ebooks-grid fade-up">
-
-    <!-- ============================================================
-         BOOK 1 — AI POWERED ETHICAL HACKING (LIVE)
-         TO UPDATE: Replace any link or description below
-         ============================================================ -->
-    <div class="ebook-card">
-      <div class="ebook-cover-img">
-        <img src="book1-cover.jpg" alt="AI-Powered Ethical Hacking" />
-      </div>
-      <div class="ebook-body">
-        <div class="ebook-tag">Cybersecurity</div>
-        <h3>AI-Powered Ethical Hacking</h3>
-        <p>The complete beginner's guide to learning cybersecurity faster using AI as your personal tutor. From zero to bug bounty ready in 30 days.</p>
-        <div class="ebook-platforms">
-          <span class="platform-label">Available on:</span>
-          <div class="platform-btns">
-            <a href="YOUR_AMAZON_LINK_HERE" target="_blank" class="btn-platform btn-amazon">
-              <span>🛍</span> Amazon
-            </a>
-            <a href="https://ghostwriterfti.gumroad.com/l/ijitki" target="_blank" class="btn-platform btn-gumroad">
-              <span>🟠</span> Gumroad
-            </a>
-            <a href="https://payhip.com/b/cbBmg" target="_blank" class="btn-platform btn-payhip">
-              <span>💙</span> Payhip
-            </a>
+      <!-- ============================================================
+           BOOK 1 — AI POWERED ETHICAL HACKING (LIVE)
+           TO UPDATE: Replace any link or description below
+           ============================================================ -->
+      <div class="ebook-card">
+        <div class="ebook-cover-img"><img src="book1-cover.jpg" alt="AI-Powered Ethical Hacking" /></div>
+        <div class="ebook-body">
+          <div class="ebook-tag">Cybersecurity</div>
+          <h3>AI-Powered Ethical Hacking</h3>
+          <p>The complete beginner's guide to learning cybersecurity faster using AI as your personal tutor. From zero to bug bounty ready in 30 days.</p>
+          <div class="ebook-platforms">
+            <span class="platform-label">Available on:</span>
+            <div class="platform-btns">
+              <a href="YOUR_AMAZON_LINK_HERE" target="_blank" class="btn-platform btn-amazon"><span>🛍</span> Amazon</a>
+              <a href="https://ghostwriterfti.gumroad.com/l/ijitki" target="_blank" class="btn-platform btn-gumroad"><span>🟠</span> Gumroad</a>
+              <a href="https://payhip.com/b/cbBmg" target="_blank" class="btn-platform btn-payhip"><span>💙</span> Payhip</a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- ============================================================
-         HOW TO ADD A NEW BOOK — COPY FROM HERE
-         ============================================================
-         STEP 1: Copy the entire block below (from div class="ebook-card" to the closing /div)
-         STEP 2: Paste it right after this comment block
-         STEP 3: Replace the following:
-           - book2-cover.jpg → your new cover image filename (upload it to GitHub too)
-           - The ebook-tag text → topic e.g. AI Automation, Shopify, Networking
-           - The h3 title → your new book title
-           - The p description → your new book description (2 sentences)
-           - YOUR_AMAZON_LINK_HERE → your Amazon book link
-           - YOUR_GUMROAD_LINK_HERE → your Gumroad book link
-           - YOUR_PAYHIP_LINK_HERE → your Payhip book link
-         STEP 4: Commit changes. Done.
-         ============================================================ -->
-    <div class="ebook-card">
-      <div class="ebook-cover-placeholder">
-        <span style="font-size:48px;">📖</span>
-        <span>COMING SOON</span>
-      </div>
-      <div class="ebook-body">
-        <div class="ebook-tag">New Release</div>
-        <h3>Next Book Coming Soon</h3>
-        <p>Another practical tech guide from FutureStack Intelligence. Subscribe to get notified the moment it drops.</p>
-        <div class="ebook-platforms">
-          <span class="platform-label">Available on:</span>
-          <div class="platform-btns">
-            <a href="YOUR_AMAZON_LINK_HERE" target="_blank" class="btn-platform btn-amazon" style="opacity:0.4; pointer-events:none;">
-              <span>🛍</span> Amazon
-            </a>
-            <a href="YOUR_GUMROAD_LINK_HERE" target="_blank" class="btn-platform btn-gumroad" style="opacity:0.4; pointer-events:none;">
-              <span>🟠</span> Gumroad
-            </a>
-            <a href="YOUR_PAYHIP_LINK_HERE" target="_blank" class="btn-platform btn-payhip" style="opacity:0.4; pointer-events:none;">
-              <span>💙</span> Payhip
-            </a>
+      <!-- ============================================================
+           HOW TO ADD A NEW BOOK — COPY FROM HERE
+           ============================================================
+           STEP 1: Copy the entire ebook-card block below
+           STEP 2: Paste it after this comment
+           STEP 3: Replace:
+             - book2-cover.jpg → your new cover filename (upload to GitHub too)
+             - ebook-tag text → topic e.g. AI Automation, Shopify
+             - h3 title → your new book title
+             - p description → 2 sentence description
+             - YOUR_AMAZON_LINK_HERE → Amazon link
+             - YOUR_GUMROAD_LINK_HERE → Gumroad link
+             - YOUR_PAYHIP_LINK_HERE → Payhip link
+           STEP 4: Commit. Done.
+           ============================================================ -->
+      <div class="ebook-card">
+        <div class="ebook-cover-placeholder"><span style="font-size:48px;">📖</span><span>COMING SOON</span></div>
+        <div class="ebook-body">
+          <div class="ebook-tag">New Release</div>
+          <h3>Next Book Coming Soon</h3>
+          <p>Another practical tech guide from FutureStack Intelligence. Subscribe to get notified the moment it drops.</p>
+          <div class="ebook-platforms">
+            <span class="platform-label">Available on:</span>
+            <div class="platform-btns">
+              <a href="YOUR_AMAZON_LINK_HERE" target="_blank" class="btn-platform btn-amazon" style="opacity:0.4;pointer-events:none;"><span>🛍</span> Amazon</a>
+              <a href="YOUR_GUMROAD_LINK_HERE" target="_blank" class="btn-platform btn-gumroad" style="opacity:0.4;pointer-events:none;"><span>🟠</span> Gumroad</a>
+              <a href="YOUR_PAYHIP_LINK_HERE" target="_blank" class="btn-platform btn-payhip" style="opacity:0.4;pointer-events:none;"><span>💙</span> Payhip</a>
+            </div>
           </div>
         </div>
       </div>
+
     </div>
-
-  </div>
-
-  <p style="text-align:center; color: var(--muted); font-size:13px; margin-top:40px; letter-spacing:1px;">
-    📢 More ebooks dropping soon. Subscribe below to get notified the moment they launch.
-  </p>
-</section>
+    <p style="text-align:center;color:var(--muted);font-size:13px;margin-top:40px;letter-spacing:1px;">📢 More ebooks dropping soon. Subscribe below to get notified first.</p>
+  </section>
+</div>
 
 <div class="section-divider"></div>
 
 <!-- COURSES -->
-<section id="courses" style="padding-top: 80px; padding-bottom: 80px;">
-  <div class="fade-up">
-    <div class="section-tag">Learn & Get Certified</div>
-    <h2 class="section-title">Courses & Certification</h2>
-    <p class="section-sub">Structured learning programmes with real certification — for those who want to go beyond reading and actually master the skills.</p>
-  </div>
-
-  <div class="courses-banner fade-up">
-    <h3>FutureStack Academy</h3>
-    <p>Certified courses on AI Automation, Shopify Systems, Cybersecurity Fundamentals and more — taught with real-world projects and assessments.</p>
-    <div class="course-topics">
-      <span class="topic-tag">AI Automation</span>
-      <span class="topic-tag">Make.com & n8n</span>
-      <span class="topic-tag">Shopify Systems</span>
-      <span class="topic-tag">Cybersecurity</span>
-      <span class="topic-tag">Cloud Computing</span>
-      <span class="topic-tag">Digital Marketing</span>
+<div class="section-wrap section-courses">
+  <section id="courses" style="padding-top:80px;padding-bottom:80px;">
+    <div class="fade-up">
+      <div class="section-tag">Learn & Get Certified</div>
+      <h2 class="section-title">Courses & Certifications</h2>
+      <p class="section-sub">Structured learning programmes with real certifications — for those who want to go beyond reading and actually master the skills.</p>
     </div>
-    <a href="https://forms.gle/28B1ozhh3nRfvY5P6" target="_blank" class="btn-primary" style="display:inline-block;">
-      Join The Waitlist
-    </a>
-  </div>
-</section>
+    <div class="courses-banner fade-up">
+      <h3>FutureStack Academy</h3>
+      <p>Certified courses on AI Automation, Shopify Systems, Cybersecurity, Cloud Security and more — taught with real-world projects, assessments and verifiable certifications.</p>
+      <div class="course-topics">
+        <span class="topic-tag">AI Automation</span>
+        <span class="topic-tag">Make.com & n8n</span>
+        <span class="topic-tag">Shopify Systems</span>
+        <span class="topic-tag">Cybersecurity</span>
+        <span class="topic-tag">Cloud Computing</span>
+        <span class="topic-tag">Cloud Security</span>
+        <span class="topic-tag">Ethical Hacking</span>
+        <span class="topic-tag">Digital Marketing</span>
+      </div>
+      <a href="https://forms.gle/28B1ozhh3nRfvY5P6" target="_blank" class="btn-primary" style="display:inline-block;">Join The Waitlist</a>
+    </div>
+  </section>
+</div>
 
 <div class="section-divider"></div>
 
 <!-- NEWSLETTER -->
-<div class="newsletter-bar fade-up" style="padding: 40px;">
+<div class="newsletter-bar fade-up">
   <h3>Stay Ahead Of The Stack</h3>
   <p>Get automation tips, cybersecurity insights, ebook launches and industry news — straight to your inbox. No spam. Ever.</p>
   <div class="newsletter-form">
@@ -1675,121 +623,101 @@
 </div>
 
 <!-- CONTACT -->
-<section id="contact">
-  <div class="fade-up">
-    <div class="section-tag">Work With Us</div>
-    <h2 class="section-title">Get In Touch</h2>
-    <p class="section-sub">Ready to automate your business, secure your systems or collaborate? Reach out and we'll respond within 24 hours.</p>
-  </div>
-
-  <div class="contact-grid fade-up">
-    <div class="contact-info">
-      <h3>Contact Information</h3>
-
-      <div class="contact-item">
-        <div class="contact-icon">✉️</div>
-        <div class="contact-item-text">
-          <div class="contact-item-label">Email</div>
-          <div class="contact-item-value">
-            <a href="mailto:futurestackintelligence@outlook.com">futurestackintelligence@outlook.com</a>
+<div class="section-wrap section-contact">
+  <section id="contact">
+    <div class="fade-up">
+      <div class="section-tag">Work With Us</div>
+      <h2 class="section-title">Get In Touch</h2>
+      <p class="section-sub">Ready to automate your business, secure your systems or collaborate? Reach out and we'll respond within 24 hours.</p>
+    </div>
+    <div class="contact-grid fade-up">
+      <div class="contact-info">
+        <h3>Contact Information</h3>
+        <div class="contact-item">
+          <div class="contact-icon">✉️</div>
+          <div class="contact-item-text">
+            <div class="contact-item-label">Email</div>
+            <div class="contact-item-value"><a href="mailto:futurestackintelligence@outlook.com">futurestackintelligence@outlook.com</a></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">𝕏</div>
+          <div class="contact-item-text">
+            <div class="contact-item-label">X (Twitter)</div>
+            <div class="contact-item-value"><a href="https://x.com/FUTURESTACK001" target="_blank">@FUTURESTACK001</a></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">in</div>
+          <div class="contact-item-text">
+            <div class="contact-item-label">LinkedIn</div>
+            <div class="contact-item-value"><a href="https://www.linkedin.com/in/futurestackintelligence" target="_blank">FutureStack Intelligence</a></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">💬</div>
+          <div class="contact-item-text">
+            <div class="contact-item-label">Discord Community</div>
+            <div class="contact-item-value" style="color:var(--muted);">Coming Soon</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">⚡</div>
+          <div class="contact-item-text">
+            <div class="contact-item-label">Response Time</div>
+            <div class="contact-item-value">Within 24 hours</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">🌍</div>
+          <div class="contact-item-text">
+            <div class="contact-item-label">Payments Accepted</div>
+            <div class="contact-item-value">USD · GBP · EUR · Crypto · Naira</div>
           </div>
         </div>
       </div>
-
-      <div class="contact-item">
-        <div class="contact-icon">𝕏</div>
-        <div class="contact-item-text">
-          <div class="contact-item-label">X (Twitter)</div>
-          <div class="contact-item-value">
-            <a href="https://x.com/FUTURESTACK001" target="_blank">@FUTURESTACK001</a>
-          </div>
+      <div class="contact-form">
+        <h3>Send A Message</h3>
+        <div class="form-group"><label>Your Name</label><input type="text" placeholder="John Smith" /></div>
+        <div class="form-group"><label>Email Address</label><input type="email" placeholder="john@example.com" /></div>
+        <div class="form-group">
+          <label>Service Interest</label>
+          <select>
+            <option value="">Select a service...</option>
+            <option>AI Workflow Automation</option>
+            <option>Shopify Store Automation</option>
+            <option>Cybersecurity Services</option>
+            <option>AI Chatbot & Support Systems</option>
+            <option>Cloud Computing & Cloud Security</option>
+            <option>Data & Reporting Automation</option>
+            <option>Ebook Purchase Enquiry</option>
+            <option>Course & Certification Waitlist</option>
+            <option>Other</option>
+          </select>
         </div>
-      </div>
-
-      <div class="contact-item">
-        <div class="contact-icon">in</div>
-        <div class="contact-item-text">
-          <div class="contact-item-label">LinkedIn</div>
-          <div class="contact-item-value">
-            <a href="https://www.linkedin.com/in/futurestackintelligence" target="_blank">FutureStack Intelligence</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="contact-item">
-        <div class="contact-icon">💬</div>
-        <div class="contact-item-text">
-          <div class="contact-item-label">Discord Community</div>
-          <div class="contact-item-value" style="color: var(--muted);">Coming Soon</div>
-        </div>
-      </div>
-
-      <div class="contact-item">
-        <div class="contact-icon">⚡</div>
-        <div class="contact-item-text">
-          <div class="contact-item-label">Response Time</div>
-          <div class="contact-item-value">Within 24 hours</div>
-        </div>
-      </div>
-
-      <div class="contact-item">
-        <div class="contact-icon">🌍</div>
-        <div class="contact-item-text">
-          <div class="contact-item-label">Payments Accepted</div>
-          <div class="contact-item-value">USD · GBP · EUR · Crypto · Naira</div>
-        </div>
+        <div class="form-group"><label>Message</label><textarea placeholder="Tell us about your project or what you need..."></textarea></div>
+        <button class="btn-submit" onclick="handleSubmit()">Send Message →</button>
       </div>
     </div>
+  </section>
+</div>
 
-    <div class="contact-form">
-      <h3>Send A Message</h3>
-      <div class="form-group">
-        <label>Your Name</label>
-        <input type="text" placeholder="John Smith" />
-      </div>
-      <div class="form-group">
-        <label>Email Address</label>
-        <input type="email" placeholder="john@example.com" />
-      </div>
-      <div class="form-group">
-        <label>Service Interest</label>
-        <select>
-          <option value="">Select a service...</option>
-          <option>AI Workflow Automation</option>
-          <option>Shopify Store Automation</option>
-          <option>Cybersecurity Services</option>
-          <option>AI Chatbot & Support Systems</option>
-          <option>Data & Reporting Automation</option>
-          <option>Cloud Computing (Coming Soon)</option>
-          <option>Ebook Purchase Enquiry</option>
-          <option>Course Waitlist</option>
-          <option>Other</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Message</label>
-        <textarea placeholder="Tell us about your project or what you need..."></textarea>
-      </div>
-      <button class="btn-submit" onclick="handleSubmit()">Send Message →</button>
-    </div>
-  </div>
-</section>
+<!-- FLOATING CONTACT BUTTON -->
+<a href="#contact" class="float-contact" id="floatContact">
+  <span class="float-contact-tooltip">Contact Us</span>
+  ✉️
+</a>
 
 <!-- FOOTER -->
 <footer>
   <div class="footer-inner">
     <div class="footer-brand">
       <img src="logo.png" alt="FutureStack">
-      <div class="footer-brand-name">
-        FutureStack Intelligence
-        <span>© 2026 All Rights Reserved</span>
-      </div>
+      <div class="footer-brand-name">FutureStack Intelligence<span>© 2026 All Rights Reserved</span></div>
     </div>
     <div class="footer-links">
-      <a href="#about">About</a>
-      <a href="#services">Services</a>
-      <a href="#ebooks">Ebooks</a>
-      <a href="#courses">Courses</a>
+      <a href="#about">About</a><a href="#services">Services</a>
+      <a href="#ebooks">Ebooks</a><a href="#courses">Courses</a>
       <a href="#contact">Contact</a>
       <a href="https://x.com/FUTURESTACK001" target="_blank">X / Twitter</a>
       <a href="https://www.linkedin.com/in/futurestackintelligence" target="_blank">LinkedIn</a>
@@ -1798,144 +726,158 @@
   </div>
 </footer>
 
+<!-- MOBILE BOTTOM NAV -->
+<div class="mobile-bottom-nav">
+  <div class="mobile-bottom-nav-inner">
+    <a href="#home" class="mob-nav-item" data-mob="home">
+      <span class="mob-icon">🏠</span>
+      <span class="mob-nav-label">Home</span>
+    </a>
+    <a href="#services" class="mob-nav-item" data-mob="services">
+      <span class="mob-icon">⚡</span>
+      <span class="mob-nav-label">Services</span>
+    </a>
+    <a href="#ebooks" class="mob-nav-item" data-mob="ebooks">
+      <span class="mob-icon">📚</span>
+      <span class="mob-nav-label">Ebooks</span>
+    </a>
+    <a href="#contact" class="mob-nav-item" data-mob="contact">
+      <span class="mob-icon">✉️</span>
+      <span class="mob-nav-label">Contact</span>
+    </a>
+  </div>
+</div>
+
 <script>
-  // HAMBURGER MENU
-  function toggleMenu() {
-    const hamburger = document.getElementById('hamburger');
-    const mobileNav = document.getElementById('mobileNav');
-    hamburger.classList.toggle('active');
-    mobileNav.classList.toggle('active');
-    document.body.style.overflow = mobileNav.classList.contains('active') ? 'hidden' : '';
-  }
+// HAMBURGER
+function toggleMenu(){
+  document.getElementById('hamburger').classList.toggle('active');
+  document.getElementById('mobileNav').classList.toggle('active');
+  document.body.style.overflow=document.getElementById('mobileNav').classList.contains('active')?'hidden':'';
+}
+function closeMenu(){
+  document.getElementById('hamburger').classList.remove('active');
+  document.getElementById('mobileNav').classList.remove('active');
+  document.body.style.overflow='';
+}
+document.addEventListener('click',function(e){
+  const nav=document.getElementById('mobileNav');
+  const ham=document.getElementById('hamburger');
+  if(nav.classList.contains('active')&&!nav.contains(e.target)&&!ham.contains(e.target))closeMenu();
+});
 
-  function closeMenu() {
-    document.getElementById('hamburger').classList.remove('active');
-    document.getElementById('mobileNav').classList.remove('active');
-    document.body.style.overflow = '';
-  }
+// CURSOR
+const cursor=document.getElementById('cursor');
+const ring=document.getElementById('cursorRing');
+document.addEventListener('mousemove',e=>{
+  cursor.style.left=e.clientX-6+'px';
+  cursor.style.top=e.clientY-6+'px';
+  setTimeout(()=>{ring.style.left=e.clientX-18+'px';ring.style.top=e.clientY-18+'px';},80);
+});
+document.querySelectorAll('a,button,.service-card').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cursor.style.transform='scale(2)';ring.style.transform='scale(1.5)';});
+  el.addEventListener('mouseleave',()=>{cursor.style.transform='scale(1)';ring.style.transform='scale(1)';});
+});
 
-  // Close menu when clicking outside
-  document.addEventListener('click', function(e) {
-    const nav = document.getElementById('mobileNav');
-    const hamburger = document.getElementById('hamburger');
-    if (nav.classList.contains('active') && !nav.contains(e.target) && !hamburger.contains(e.target)) {
-      closeMenu();
-    }
+// SCROLL PROGRESS
+window.addEventListener('scroll',()=>{
+  const p=document.getElementById('scrollProgress');
+  const s=document.documentElement.scrollTop;
+  const h=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+  p.style.height=(s/h*100)+'%';
+  updateNav();
+  updateMobileNav();
+  updateFloatBtn();
+});
+
+// ACTIVE NAV HIGHLIGHT
+function updateNav(){
+  const sections=['about','services','ebooks','courses','contact'];
+  let current='';
+  sections.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el&&window.scrollY>=el.offsetTop-200)current=id;
   });
-
-  // CURSOR
-  const cursor = document.getElementById('cursor');
-  const ring = document.getElementById('cursorRing');
-  let ringX = 0, ringY = 0;
-
-  document.addEventListener('mousemove', e => {
-    cursor.style.left = e.clientX - 6 + 'px';
-    cursor.style.top = e.clientY - 6 + 'px';
-    setTimeout(() => {
-      ring.style.left = e.clientX - 18 + 'px';
-      ring.style.top = e.clientY - 18 + 'px';
-    }, 80);
+  document.querySelectorAll('.nav-links a').forEach(a=>{
+    a.classList.remove('active');
+    if(a.dataset.section===current)a.classList.add('active');
   });
+}
 
-  document.querySelectorAll('a, button').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      cursor.style.transform = 'scale(2)';
-      ring.style.transform = 'scale(1.5)';
-    });
-    el.addEventListener('mouseleave', () => {
-      cursor.style.transform = 'scale(1)';
-      ring.style.transform = 'scale(1)';
-    });
+// MOBILE BOTTOM NAV ACTIVE
+function updateMobileNav(){
+  const sections=['home','services','ebooks','contact'];
+  let current='home';
+  sections.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el&&window.scrollY>=el.offsetTop-300)current=id;
   });
-
-  // SCROLL ANIMATIONS
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.classList.add('visible');
-      }
-    });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
-
-  // ORDER MODAL
-  function openOrder(serviceName, serviceDesc) {
-    document.getElementById('modalTitle').textContent = serviceName;
-    document.getElementById('modalDesc').textContent = serviceDesc;
-    document.getElementById('modalServiceInput').value = serviceName;
-    document.getElementById('modalForm').style.display = 'block';
-    document.getElementById('modalSuccess').style.display = 'none';
-    document.getElementById('orderModal').classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeOrder() {
-    document.getElementById('orderModal').classList.remove('active');
-    document.body.style.overflow = '';
-  }
-
-  document.getElementById('orderModal').addEventListener('click', function(e) {
-    if (e.target === this) closeOrder();
+  document.querySelectorAll('.mob-nav-item').forEach(a=>{
+    a.classList.remove('active');
+    if(a.dataset.mob===current)a.classList.add('active');
   });
+}
 
-  async function handleModalSubmit(e) {
-    e.preventDefault();
-    const form = e.target;
-    const btn = form.querySelector('.btn-submit');
-    const serviceName = document.getElementById('modalServiceInput').value;
+// FLOATING CONTACT BUTTON - only in contact section
+function updateFloatBtn(){
+  const contact=document.getElementById('contact');
+  const btn=document.getElementById('floatContact');
+  if(!contact||!btn)return;
+  const rect=contact.getBoundingClientRect();
+  const inContact=rect.top<=window.innerHeight&&rect.bottom>=0;
+  btn.classList.toggle('visible',inContact);
+}
 
-    btn.textContent = 'Sending...';
-    btn.disabled = true;
+// SCROLL ANIMATIONS
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+},{threshold:0.1});
+document.querySelectorAll('.fade-up,.slide-left,.slide-right,.scale-in').forEach(el=>observer.observe(el));
 
-    try {
-      const response = await fetch(form.action, {
-        method: 'POST',
-        body: new FormData(form),
-        headers: { 'Accept': 'application/json' }
-      });
+// ORDER MODAL
+function openOrder(name,desc){
+  document.getElementById('modalTitle').textContent=name;
+  document.getElementById('modalDesc').textContent=desc;
+  document.getElementById('modalServiceInput').value=name;
+  document.getElementById('modalForm').style.display='block';
+  document.getElementById('modalSuccess').style.display='none';
+  document.getElementById('orderModal').classList.add('active');
+  document.body.style.overflow='hidden';
+}
+function closeOrder(){
+  document.getElementById('orderModal').classList.remove('active');
+  document.body.style.overflow='';
+}
+document.getElementById('orderModal').addEventListener('click',function(e){if(e.target===this)closeOrder();});
 
-      if (response.ok) {
-        document.getElementById('modalForm').style.display = 'none';
-        document.getElementById('successService').textContent = serviceName;
-        document.getElementById('modalSuccess').style.display = 'block';
-        setTimeout(closeOrder, 4000);
-      } else {
-        btn.textContent = 'Failed. Try Again.';
-        btn.disabled = false;
-      }
-    } catch {
-      btn.textContent = 'Failed. Try Again.';
-      btn.disabled = false;
-    }
-  }
+async function handleModalSubmit(e){
+  e.preventDefault();
+  const form=e.target;
+  const btn=form.querySelector('.btn-submit');
+  const svc=document.getElementById('modalServiceInput').value;
+  btn.textContent='Sending...';btn.disabled=true;
+  try{
+    const r=await fetch(form.action,{method:'POST',body:new FormData(form),headers:{'Accept':'application/json'}});
+    if(r.ok){
+      document.getElementById('modalForm').style.display='none';
+      document.getElementById('successService').textContent=svc;
+      document.getElementById('modalSuccess').style.display='block';
+      setTimeout(closeOrder,4000);
+    }else{btn.textContent='Failed. Try Again.';btn.disabled=false;}
+  }catch{btn.textContent='Failed. Try Again.';btn.disabled=false;}
+}
 
-  // FORM SUBMIT
-  function handleSubmit() {
-    const btn = document.querySelector('.btn-submit');
-    btn.textContent = 'Message Sent ✓';
-    btn.style.background = 'linear-gradient(135deg, #00ff88, #00cc66)';
-    setTimeout(() => {
-      btn.textContent = 'Send Message →';
-      btn.style.background = '';
-    }, 3000);
-  }
+// CONTACT FORM
+function handleSubmit(){
+  const btn=document.querySelector('.contact-form .btn-submit');
+  btn.textContent='Message Sent ✓';
+  btn.style.background='linear-gradient(135deg,#00ff88,#00cc66)';
+  setTimeout(()=>{btn.textContent='Send Message →';btn.style.background='';},3000);
+}
 
-  // ANIMATED STATS COUNTER
-  function animateCounter(el, target) {
-    let start = 0;
-    const duration = 2000;
-    const step = (timestamp) => {
-      if (!start) start = timestamp;
-      const progress = Math.min((timestamp - start) / duration, 1);
-      if (typeof target === 'number') {
-        el.textContent = Math.floor(progress * target) + '+';
-      }
-      if (progress < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  }
+// INIT
+updateMobileNav();
+updateFloatBtn();
 </script>
-
 </body>
 </html>
