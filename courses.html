@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>FutureStack Intelligence — Courses & Certifications</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+.courses-wrap {
+  position:relative;z-index:1;
+  min-height:calc(100vh - 68px);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:60px 20px 100px;
+  text-align:center;
+  background:linear-gradient(160deg,#050816 0%,#08062a 50%,#050816 100%);
+}
+
+.academy-badge {
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(123,47,247,0.12);
+  border:1px solid rgba(123,47,247,0.35);
+  color:#b57bff;
+  font-family:var(--font-head);font-size:9px;letter-spacing:3px;text-transform:uppercase;
+  padding:8px 18px;border-radius:100px;margin-bottom:28px;
+  animation:pulseBorder 3s ease infinite;
+}
+
+@keyframes pulseBorder {
+  0%,100%{box-shadow:0 0 0 0 rgba(123,47,247,0);}
+  50%{box-shadow:0 0 0 6px rgba(123,47,247,0.08);}
+}
+
+.coming-title {
+  font-family:var(--font-head);
+  font-size:clamp(28px,5vw,52px);
+  font-weight:900;color:white;
+  line-height:1.1;margin-bottom:20px;
+}
+
+.coming-title span {
+  background:linear-gradient(135deg,var(--purple),#a78bff);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+
+.coming-sub {
+  font-size:clamp(14px,2vw,17px);
+  color:var(--muted);max-width:540px;
+  margin:0 auto 40px;line-height:1.8;font-weight:300;
+}
+
+.topics-grid {
+  display:flex;flex-wrap:wrap;gap:10px;
+  justify-content:center;max-width:680px;
+  margin:0 auto 44px;
+}
+
+.topic-chip {
+  background:var(--glass);border:1px solid var(--glass-border);
+  color:var(--muted);
+  font-family:var(--font-head);font-size:9px;letter-spacing:1.5px;
+  text-transform:uppercase;padding:8px 16px;border-radius:100px;
+  transition:all 0.3s;
+}
+
+.topic-chip:hover {
+  color:var(--cyan);border-color:rgba(0,234,255,0.3);
+  background:rgba(0,234,255,0.06);
+}
+
+.waitlist-box {
+  background:var(--glass);border:1px solid var(--glass-border);
+  border-radius:8px;padding:36px 40px;
+  max-width:480px;width:100%;margin:0 auto;
+}
+
+.waitlist-box h3 {
+  font-family:var(--font-head);font-size:14px;color:white;
+  margin-bottom:10px;letter-spacing:1px;
+}
+
+.waitlist-box p { font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:24px; }
+
+@media(max-width:768px) {
+  .courses-wrap { padding:48px 20px 100px; }
+  .waitlist-box { padding:24px 20px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="index.html" class="nav-logo">
+    <img src="logo.png" alt="FutureStack">
+    <div class="nav-brand-text">FutureStack<span>Intelligence</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="services.html">Services</a></li>
+    <li><a href="ebooks.html">Ebooks</a></li>
+    <li><a href="courses.html" class="active">Courses</a></li>
+    <li><a href="contact.html" class="nav-cta">Work With Us</a></li>
+  </ul>
+  <div class="hamburger" id="ham"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html">Home</a>
+  <a href="services.html">Services</a>
+  <a href="ebooks.html">Ebooks</a>
+  <a href="courses.html" class="active">Courses</a>
+  <a href="contact.html" class="m-cta">Work With Us</a>
+</div>
+
+<div class="page-wrap">
+  <div class="courses-wrap">
+    <div class="academy-badge">⏳ Coming Soon</div>
+    <h1 class="coming-title">FutureStack <span>Academy</span></h1>
+    <p class="coming-sub">Certified courses on AI Automation, Cybersecurity, Cloud Security and more — taught with real-world projects, assessments and verifiable certifications. Join the waitlist to be first in.</p>
+
+    <div class="topics-grid">
+      <div class="topic-chip">AI Automation</div>
+      <div class="topic-chip">Make.com & n8n</div>
+      <div class="topic-chip">Shopify Systems</div>
+      <div class="topic-chip">Cybersecurity</div>
+      <div class="topic-chip">Ethical Hacking</div>
+      <div class="topic-chip">Cloud Computing</div>
+      <div class="topic-chip">Cloud Security</div>
+      <div class="topic-chip">Digital Marketing</div>
+      <div class="topic-chip">Bug Bounty Hunting</div>
+      <div class="topic-chip">Networking Basics</div>
+    </div>
+
+    <div class="waitlist-box">
+      <h3>Join The Waitlist</h3>
+      <p>Be the first to know when FutureStack Academy launches. Early members get exclusive discounts and priority access.</p>
+      <a href="https://forms.gle/28B1ozhh3nRfvY5P6" target="_blank" class="btn btn-cyan" style="width:100%;justify-content:center;">Join Waitlist →</a>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand"><img src="logo.png" alt="FutureStack"><div class="footer-brand-name">FutureStack Intelligence<span>© 2026 All Rights Reserved</span></div></div>
+    <div class="footer-links">
+      <a href="index.html">Home</a><a href="services.html">Services</a><a href="ebooks.html">Ebooks</a>
+      <a href="courses.html">Courses</a><a href="contact.html">Contact</a>
+      <a href="https://x.com/FUTURESTACK001" target="_blank">X / Twitter</a>
+      <a href="https://www.linkedin.com/in/futurestackintelligence" target="_blank">LinkedIn</a>
+    </div>
+    <div class="footer-copy">Built with precision. Delivered globally.</div>
+  </div>
+</footer>
+
+<div class="bottom-nav">
+  <div class="bottom-nav-inner">
+    <a href="index.html" class="bnav-item"><span class="bnav-icon">🏠</span><span class="bnav-label">Home</span></a>
+    <a href="services.html" class="bnav-item"><span class="bnav-icon">⚡</span><span class="bnav-label">Services</span></a>
+    <a href="ebooks.html" class="bnav-item"><span class="bnav-icon">📚</span><span class="bnav-label">Ebooks</span></a>
+    <a href="contact.html" class="bnav-item"><span class="bnav-icon">✉️</span><span class="bnav-label">Contact</span></a>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+</body>
+</html>
